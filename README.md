@@ -22,8 +22,14 @@
 3. 마지막에 **5173 포트**가 자동 포워딩됩니다. VS Code 하단 **PORTS** 탭 → 5173 의 🌐(Open in Browser) → **검수 인박스**.
    - 상단에서 데이터 소스 **‘파싱 결과’** 선택 + `plugin:gbm-score` 스위치 ON → **본인이 방금 파싱한 데이터 + 방금 훈련한 GBM**으로 `comfozi.pages.dev` 화면에 도달.
 
-> 로컬에서 직접: `git clone --recursive https://github.com/crimson206/comfozi-studio && cd comfozi-studio && make setup && make all`
-> 필요: Node 20 · Python 3.11 · [uv](https://docs.astral.sh/uv/). (한글 폰트는 devcontainer가 설치)
+> **로컬 PC(Codespaces 아닐 때):** Codespaces는 devcontainer가 아래를 자동 설치하지만, 로컬에선 **직접 준비**해야 합니다.
+> 1. 사전 도구: **Node 20 · Python 3.11 · [uv](https://docs.astral.sh/uv/) · git**
+> 2. **한글 폰트**(data-raw의 pdf/photo 렌더용, 없으면 이미지 생성이 깨짐):
+>    · Ubuntu/Debian: `sudo apt install -y fonts-nanum fonts-noto-cjk`
+>    · macOS: NanumGothic·NotoSansKR 설치 — 또는 `export COMFOZI_KR_FONT=/경로/폰트.ttf`
+> 3. 실행: `git clone --recursive https://github.com/crimson206/comfozi-studio && cd comfozi-studio && make setup && make all`
+>
+> (`make setup`이 glpkg·submodule·의존을 깔지만, 위 **도구·폰트는 OS별로 직접** 준비해야 합니다 — 이게 Codespaces에서 devcontainer가 대신 해주던 부분입니다.)
 
 ---
 
@@ -74,15 +80,19 @@ make inbox
 
 > ⚠️ **기본 `make setup` 엔 아래 AI 도구가 포함되지 않습니다.** deterministic 이 기본값이며, AI 파싱을 쓰려면 아래를 직접 준비하세요.
 
+> ⚠️ **AI 모드엔 `isesh`(@ist 세션 러너)가 필요합니다.** 미설치면 `parse --mode ai`가 세션을 못 띄워 **모든 문서가 `failed`** 로 나옵니다(=Claude Code만 깔아선 부족). @ist 툴체인 설치엔 레지스트리 접근 권한이 필요(오너/팀 환경). 일반 심사자 기본 경로는 여전히 deterministic 입니다.
+
 **AI 모드 준비 (1회):**
 ```bash
-# 1) Claude Code CLI + isesh 설치 (본인 환경에)
-#    Claude Code: https://docs.anthropic.com/en/docs/claude-code  ·  isesh: 세션 러너
-# 2) parse-fleet 파서 프로필/프롬프트 설치 (isesh 가 comfozi-doc-parser 세션을 띄우는 데 필요)
+# 1) Claude Code CLI 설치   (https://docs.anthropic.com/en/docs/claude-code)
+# 2) isesh(@ist 툴체인) 설치 — snapshot 으로
+npm i -g @microwiseai/snapshot           # snapshot CLI (npm)
+snapshot install @ist/beta               # isesh · imessenger · skit 등 @ist 툴체인
+# 3) parse-fleet 파서 프로필/프롬프트 설치 (isesh 가 comfozi-doc-parser 세션 띄우는 데 필요)
 cd vendor/parse-fleet && skit install    # profile → ~/.ist/profiles/ , prompt → ~/.ist/prompts/global/
 cd ../..
-# 3) Claude 인증
-claude login                             # OAuth  (또는 Codespaces Secret 에 ANTHROPIC_API_KEY)
+# 4) Claude 인증
+claude login                             # OAuth  (또는 ANTHROPIC_API_KEY / Codespaces Secret)
 ```
 
 **실행:**
