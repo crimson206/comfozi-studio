@@ -60,6 +60,11 @@ skit install @comfozi/parse-fleet@0.2.0               # 파서 프로필/프롬�
 
 ## 2. 파이프라인 (실제 명령)
 
+> **데이터 흐름 — 두 갈래가 ④에서 만납니다.** ①·②의 `parse`는 **검수 대상 데이터**(`work/parsed.json` — 무엇을 볼지)를 만들고, ③의 `export-gbm`은 **승인/반려 라벨이 있는 승인이력**으로 GBM을 *따로* 훈련합니다. ④ 인박스에서 GBM이 그 검수 대상을 **점수화만** 합니다.
+> - **`parsed.json`은 훈련 입력이 아닙니다** — 라벨(approved/review_result)이 없기 때문입니다. 스키마로 보면 `parsed.json ≈ 승인이력의 input 부분`(supplier·item·spec·price·date)이고, **빠진 건 truth 라벨**입니다.
+> - ③ 훈련 데이터: 데모(인자 없음)=**합성 라벨 데이터**, BYO=`--input <base>`의 `base.input.csv` + `base.truth.csv`(승인/반려 라벨).
+> - **본인 파싱 데이터로 훈련하려면**: ④ 인박스에서 사람이 승인/반려로 검수 → 그게 truth 라벨 → 그 라벨로 재훈련(**flywheel**). `parse → 바로 train`이 아닙니다.
+
 ### ① 원본 증빙 문서 생성 → `work/raw/`
 ```bash
 comfozi-data-raw gen --seed 7 --count 24 --out work/raw
@@ -75,31 +80,34 @@ comfozi-parse-fleet parse work/raw --mode auto --engine headless --out work/pars
 - `--retry <n>` 실패 문서 자동 재시도(기본 1) — 일시적 실패에도 안정적으로 완주. `--concurrency <K>` 동시성(기본 2). `--ai-input vision|vision+ocr`(기본 vision).
 - **고급**: `--engine isesh --supervise` — 대화형 세션 풀 + smon 자동승인(위 준비물의 고급 섹션, detector-agent 필요). 세션 확인: `isesh list` · `isesh attach <세션명>`.
 
+> `work/parsed.json`은 ④ 인박스의 **검수 대상 데이터**입니다 — ③ GBM의 훈련 입력이 아닙니다(라벨 없음).
+
 ### ③ GBM 훈련·export → `work/gbm/`
 ```bash
 export-gbm --out work/gbm
 ```
-사전계산 e5 임베딩으로 LightGBM 훈련 → `work/gbm/`에 `model.json`·`embeddings_lookup.json`·`infer.js`·`feature-contract.md`. **torch 없이 동작**(base 설치).
+**승인/반려 라벨이 있는 승인이력**으로 LightGBM을 훈련합니다(②의 `parsed.json`이 아님 — 라벨이 없어 그대로는 훈련 불가). 인자 없이 실행하면 **합성 라벨 데이터**로 훈련하고, 사전계산 e5 임베딩을 써 **torch 없이 동작**(base 설치)합니다. 산출: `work/gbm/`에 `model.json`·`embeddings_lookup.json`·`infer.js`·`feature-contract.md`.
 
-**본인 승인이력으로 훈련(BYO)** — e5를 새로 뽑으므로 CPU torch가 필요:
+**본인 승인이력으로 훈련(BYO)** — 라벨된 이력(`base.input.csv` 특징 + `base.truth.csv` 승인/반려)이 필요하고, 신규 어휘 e5를 새로 뽑으므로 CPU torch가 필요:
 ```bash
 export-gbm setup                                                   # uv로 CPU 전용 torch 설치(nvidia-cuda 0)
-export-gbm --input sample-data/approval-history --out work/gbm     # <base>.input.csv + <base>.truth.csv
+export-gbm --input sample-data/approval-history --out work/gbm     # <base>.input.csv(특징) + <base>.truth.csv(라벨)
 ```
 
 ### ④ 검수 인박스 (= 데모 프론트)
 ```bash
 comfozi-app --parsed work/parsed.json --gbm work/gbm --host 0.0.0.0
 ```
-- `--parsed work/parsed.json` → 앱의 **‘파싱 결과’** 데이터 소스로 주입(내부적으로 `dist/parsed.json`).
-- `--gbm work/gbm` → ③의 산출 디렉토리를 **`dist/gbm/`로 주입**(model.json·embeddings_lookup.json).
-- **5173 포트**(Codespace 하단 PORTS 탭 → 🌐, `--port`로 변경) → 상단 데이터 소스 **‘파싱 결과’** + `plugin:gbm-score` ON → **본인 데이터 + 본인 GBM**으로 `comfozi.pages.dev` 화면 도달.
+- `--parsed work/parsed.json` → 앱의 **‘파싱 결과’**(②의 검수 대상 데이터) 소스로 주입(내부적으로 `dist/parsed.json`).
+- `--gbm work/gbm` → ③의 산출(라벨된 이력으로 훈련된 GBM)을 **`dist/gbm/`로 주입**(model.json·embeddings_lookup.json).
+- **여기서 두 갈래가 만납니다**: `plugin:gbm-score` ON → GBM이 ‘파싱 결과’의 각 행을 **점수화**(승인 확률)합니다. 사람이 승인/반려로 검수하면 그 라벨이 다음 훈련의 truth가 됩니다(flywheel).
+- **5173 포트**(Codespace 하단 PORTS 탭 → 🌐, `--port`로 변경) → 상단 데이터 소스 **‘파싱 결과’** 선택 → **본인 데이터 + 본인 GBM**으로 `comfozi.pages.dev` 화면 도달.
 
 ---
 
 ## 동작 원리 (AI 파싱)
-`comfozi-parse-fleet`가 이미지/스캔을 **로컬 isesh 세션 풀**(Claude vision)에 분산 파싱합니다 — `isesh`(세션 러너)·`imessenger`(세션 메시징)·`skit`(프로필 설치)·`snapshot`(@ist/beta 일괄설치). **서버 0 · 본인 Claude 구독 · 전부 로컬.**
-- 파서 계약 커스터마이즈: `skit install @comfozi/parse-fleet@0.1.1` 로 받은 `~/.ist/` 의 `comfozi-doc-parser` 프로필 / `parser-session-contract` 프롬프트.
+`comfozi-parse-fleet`가 이미지/스캔을 **본인 Claude 구독으로 로컬 vision 파싱**합니다. 기본 엔진 **headless**는 `[DOC-EXTRACT]` 요청마다 `claude -p`(print) 1샷을 띄워 **패키지에 동봉된 파서 계약**(`comfozi-doc-parser` 프로필)을 system prompt로 주고, `--allowedTools Read Write Glob`로 이미지를 읽어 RawRow JSON을 씁니다 — 프롬프트 없이 응답·종료. **서버 0 · 전부 로컬.**
+- 고급 `--engine isesh --supervise`는 대화형 세션 풀(`isesh`·`imessenger`)을 `smon`이 감시·자동승인합니다. 이 경로의 파서 프로필은 `skit install @comfozi/parse-fleet@0.2.0`으로 `~/.ist/`에 설치.
 
 ## 구조 (thin repo)
 ```
@@ -118,7 +126,8 @@ work/                  파이프라인 산출물(gitignore): raw/ · parsed.json
 
 ## 문제 해결
 - **`comfozi-*: command not found`**: 해당 설치 줄을 먼저 (`glpkg install -g @comfozi/… --source gitlab`, `export-gbm`은 `glpkg install comfozi-approval-ml --pypi --group blaybus2026-vibe`). 전역 npm bin이 PATH에 있는지 확인.
-- **`export-gbm` 설치 실패(Requires-Python)**: Python이 3.11이어야 함(`>=3.11,<3.12`). Codespace는 자동, 로컬은 3.11 환경에서 설치.
-- **파싱이 이미지에서 `failed`**: AI 세션 준비 확인 — `command -v tmux isesh claude` + `claude login` + `skit install @comfozi/parse-fleet@0.1.1`(프로필). `isesh list`/`attach`로 세션 직접 확인. (`detector-agent ✗`는 무관.)
+- **`export-gbm` 설치 실패**: ① Python이 **3.11**이어야 함(`>=3.11,<3.12`). ② 시스템 파이썬이 externally-managed(**PEP 668**)면 `glpkg … --pypi`가 거부될 수 있음 — venv에서 설치하세요: `python3 -m venv .venv && . .venv/bin/activate` 후 `glpkg install comfozi-approval-ml --pypi --group blaybus2026-vibe`. (Codespace devcontainer는 해당 없음.)
+- **파싱이 이미지에서 `failed`**(headless 기본): `claude login` + `command -v claude` 확인. **root로 실행하지 마세요** — `claude -p`가 root/sudo에서 `--dangerously-skip-permissions`를 거부합니다(일반 사용자로 실행). isesh 경로면 `skit install @comfozi/parse-fleet@0.2.0` + `isesh list`.
+- **`comfozi-app` 실행 시 `EACCES … dist/parsed.json`**: 전역 설치 위치가 root 소유일 때(예: `sudo npm i -g`), **설치한 사용자로** `comfozi-app`을 실행하세요(전역 패키지의 `dist/`에 주입하므로). Codespace(사용자 소유 전역)는 해당 없음.
 - **인박스 ‘파싱 결과’가 비어있음**: `comfozi-app`을 `--parsed work/parsed.json`으로 실행했는지 확인.
 - **BYO에서 `EmbedBackendMissing`(e5 필요)**: `export-gbm setup` 먼저(또는 `pip install 'comfozi-approval-ml[embed]'`).
