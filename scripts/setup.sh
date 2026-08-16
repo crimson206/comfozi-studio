@@ -23,6 +23,10 @@ echo "▶ (4/5) JS 의존 설치 + 빌드 (data-raw / parse-fleet / app)"
 echo "▶ (5/5) python 의존 (approval-ml, GBM 훈련)"
 ( cd apps/comfozi.approval-ml && uv sync )
 
+# glpkg 가 남긴 레지스트리 .npmrc 정리 — 설치 끝나면 불필요(런타임/파싱/훈련은 glpkg 미사용).
+# 남겨두면 작업트리에 파일이 보이고, 재실행 시 "pre-existing .npmrc" 풋건 유발.
+rm -f "$ROOT/.npmrc" apps/*/.npmrc vendor/*/.npmrc 2>/dev/null || true
+
 echo ""
 echo "✅ 셋업 완료. 다음 중 하나:"
 echo "   make all              # 생성→파싱→훈련→인박스 한 번에"
