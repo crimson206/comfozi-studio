@@ -15,9 +15,9 @@ echo "▶ (3/5) glpkg + @comfozi scope 매핑 (tokenless public)"
 npm i -g @glpkg/cli >/dev/null 2>&1 || sudo npm i -g @glpkg/cli
 glpkg config scope:set @comfozi blaybus2026-vibe
 
-echo "▶ (4/5) JS 의존 설치 + 빌드 (data-raw / parse-fleet / app)"
+echo "▶ (4/5) JS 의존 설치 + 빌드 (parse-fleet 패키지 · data-raw · app)"
 ( cd apps/comfozi.data-raw    && rm -f package-lock.json glpkg.lock.json && glpkg install && npm run build )
-( cd vendor/parse-fleet       && rm -f package-lock.json glpkg.lock.json && glpkg install )
+( rm -f package-lock.json glpkg.lock.json && glpkg install --source gitlab )   # @comfozi/parse-fleet CLI+deps → node_modules (published, vendored 아님)
 ( cd apps/comfozi.app         && rm -f package-lock.json glpkg.lock.json && glpkg install )
 
 echo "▶ (5/5) python 의존 (approval-ml, GBM 훈련)"

@@ -32,10 +32,10 @@ train:
 inbox:
 	bash scripts/40-inbox.sh
 
-install-parser:   ## AI 파서 프로필/프롬프트를 ~/.ist/ 에 설치 (vendored, 배치 계약 포함)
+install-parser:   ## AI 파서 프로필/프롬프트를 ~/.ist/ 에 설치 (published @comfozi/parse-fleet 에서)
 	mkdir -p ~/.ist/profiles ~/.ist/prompts/global
-	cp vendor/parse-fleet/profiles/*.md ~/.ist/profiles/
-	cp vendor/parse-fleet/prompts/*.md ~/.ist/prompts/global/
+	cp node_modules/@comfozi/parse-fleet/profiles/*.md ~/.ist/profiles/
+	cp node_modules/@comfozi/parse-fleet/prompts/*.md ~/.ist/prompts/global/
 	@echo "✅ comfozi-doc-parser 프로필 설치됨 (~/.ist/profiles/)"
 
 all:

@@ -20,7 +20,7 @@ claude login                                 # Claude 로그인
 # isesh 툴체인(@ist) + 파서 프로필
 npm i -g @microwiseai/snapshot
 snapshot install @ist/beta                   # isesh · imessenger · skit  (detector-agent ✗ 뜨면 무시)
-skit install @comfozi/parse-fleet@0.1.0      # comfozi-doc-parser 프로필/프롬프트 → ~/.ist/
+make install-parser                          # comfozi-doc-parser 프로필 → ~/.ist/ (published 패키지에서)
 ```
 
 > **로컬 PC**면 추가로 **Node 20 · Python 3.11 · [uv](https://docs.astral.sh/uv/) · 한글폰트**(`fonts-nanum fonts-noto-cjk`)도 필요 — Codespace는 devcontainer가 자동 설치.
@@ -60,14 +60,14 @@ make inbox
 
 ## 동작 원리 (AI 파싱)
 parse-fleet이 이미지/스캔을 **로컬 isesh 세션 풀**(Claude vision)에 분산 파싱합니다 — `isesh`(세션 러너)·`imessenger`(세션 메시징)·`skit`(프로필 설치)·`snapshot`(@ist/beta 일괄설치). **서버 0 · 본인 Claude 구독 · 전부 로컬.** comfozi 실제 제품이 쓰는 세션 인프라 그대로입니다.
-- 커스터마이즈: `vendor/parse-fleet/profiles/comfozi-doc-parser.md`(파서 계약) · `prompts/parser-session-contract.md`.
+- 커스터마이즈: `node_modules/@comfozi/parse-fleet/profiles/comfozi-doc-parser.md`(파서 계약) · `.../prompts/parser-session-contract.md`.
 
 ## 구조
 ```
 apps/comfozi.data-raw/     원본 문서 생성기        (submodule · public)
 apps/comfozi.approval-ml/  GBM 훈련·export (uv)    (submodule)
 apps/comfozi.app/          검수 인박스 = 데모 프론트 (submodule) ← 최종 화면
-vendor/parse-fleet/        파싱 오케스트레이터
+@comfozi/parse-fleet       파싱 CLI (published 패키지 · glpkg install → node_modules)
 sample-data/               바로 써볼 raw 문서 + 승인이력 CSV
 ```
 `@comfozi/*` 는 public 레지스트리에서 tokenless(glpkg) 설치.
@@ -77,6 +77,6 @@ sample-data/               바로 써볼 raw 문서 + 승인이력 CSV
 - 합성/샘플 데이터로 **파이프라인·스케일 거동**을 보여줍니다. 실제 승인 정확도는 실제 라벨 이력이 있어야 하며 그 경로가 `make train INPUT=...`.
 
 ## 문제 해결
-- **`make parse` 가 이미지에서 `failed`**: AI 세션 준비 확인 — `command -v tmux isesh claude` + `claude login` + `skit install @comfozi/parse-fleet@0.1.0`(프로필). (`detector-agent ✗` 는 무관.)
+- **`make parse` 가 이미지에서 `failed`**: AI 세션 준비 확인 — `command -v tmux isesh claude` + `claude login` + `make install-parser`(프로필). (`detector-agent ✗` 는 무관.)
 - **인박스 '파싱 결과'가 비어있음**: `make parse` → `make inbox` 순서 확인(`work/parsed.json` → app 으로 복사됨).
 - **`command not found @comfozi/…`**: `make setup` 먼저(또는 Codespace postCreate 완료 대기).

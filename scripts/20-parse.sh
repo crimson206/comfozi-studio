@@ -8,5 +8,5 @@ MODE="${1:-deterministic}"; SRC="${2:-$ROOT/work/raw}"; SESS="${SESSIONS:-4}"; B
 mkdir -p "$ROOT/work"
 echo "▶ 파싱: $SRC (mode=$MODE) → work/parsed.json"
 echo "  (진행 실시간: tail -f work/parsed.jsonl)"
-node "$ROOT/vendor/parse-fleet/dist/cli.js" parse "$SRC" --mode "$MODE" --sessions "$SESS" --batch "$BATCH_N" --out "$ROOT/work/parsed.json" --stream "$ROOT/work/parsed.jsonl" --pretty
+node "$ROOT/node_modules/@comfozi/parse-fleet/dist/cli.js" parse "$SRC" --mode "$MODE" --sessions "$SESS" --batch "$BATCH_N" --out "$ROOT/work/parsed.json" --stream "$ROOT/work/parsed.jsonl" --pretty
 echo "✅ work/parsed.json  ·  스트림: work/parsed.jsonl"

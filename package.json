@@ -1,0 +1,8 @@
+{
+  "name": "comfozi-studio",
+  "private": true,
+  "description": "comfozi-studio 파이프라인 의존성 — 파싱 CLI(@comfozi/parse-fleet) 를 published 패키지로 설치해 사용.",
+  "dependencies": {
+    "@comfozi/parse-fleet": "^0.1.1"
+  }
+}
