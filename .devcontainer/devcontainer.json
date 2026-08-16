@@ -2,10 +2,12 @@
   "name": "comfozi-studio",
   "image": "mcr.microsoft.com/devcontainers/javascript-node:20",
   "features": {
-    "ghcr.io/devcontainers/features/python:1": { "version": "3.11" }
+    "ghcr.io/devcontainers/features/python:1": { "version": "3.11" },
+    "ghcr.io/devcontainers/features/sshd:1": { "version": "latest" }
   },
   "onCreateCommand": "sudo apt-get update -y && sudo apt-get install -y fonts-nanum fonts-noto-cjk",
-  "postCreateCommand": "bash scripts/setup.sh",
+  "postCreateCommand": "bash scripts/setup.sh 2>&1 | tee /tmp/comfozi-setup.log",
+  "waitFor": "onCreateCommand",
   "forwardPorts": [5173],
   "portsAttributes": {
     "5173": { "label": "comfozi 검수 인박스", "onAutoForward": "openPreview" }
