@@ -94,22 +94,27 @@ AI 파싱은 "서버 없이, 본인 Claude 구독으로" 돌리기 위해 우리
 >
 > **왜 세션 풀?** 문서마다 Claude를 콜드스타트하면 대량(수백 건)에서 느리고 낭비됩니다 → isesh가 **warm 세션 K개를 재사용**하며 `[DOC-EXTRACT]` 요청을 백프레셔로 흘려보냅니다(동시성 = `--concurrency K`, 기본 2). **comfozi 실제 제품이 쓰는 세션 인프라 그대로**라, AI 파싱을 돌려보는 것 자체가 우리 도구 실물 체험이 됩니다.
 
-> ⚠️ **AI 모드엔 `isesh`(@ist 세션 러너)가 필요** — 기본 `make setup`엔 미포함이고 deterministic이 기본값입니다. **미설치/미로그인이면 `parse --mode ai`가 세션을 못 띄워 모든 문서가 `failed`** 로 나옵니다(Claude Code만으론 부족). @ist 툴체인 설치엔 레지스트리 접근 권한이 필요합니다(오너/팀 환경).
+> ⚠️ **AI 모드엔 `isesh`(@ist 세션 러너) + tmux + Claude Code + IST 인증**이 필요합니다 — 기본 `make setup`엔 미포함이고 deterministic이 기본값. **하나라도 없으면 `parse --mode ai`가 세션을 못 띄워 모든 문서가 `failed`**. `@ist/beta` 설치는 **IST 계정(`ist auth login`, Google)** 이 있어야 합니다 → **오너/팀 환경 전용.** 외부 심사자는 deterministic 경로를 쓰세요.
 
 **AI 모드 준비 (1회):**
 ```bash
-# 1) Claude Code CLI 설치   (https://docs.anthropic.com/en/docs/claude-code)
-# 2) isesh(@ist 툴체인) 설치 — snapshot 으로
-npm i -g @microwiseai/snapshot           # snapshot CLI (npm)
-snapshot install @ist/beta               # isesh · imessenger · skit 등 @ist 툴체인
-# 3) parse-fleet 파서 프로필/프롬프트 설치 (isesh 가 comfozi-doc-parser 세션 띄우는 데 필요)
-cd vendor/parse-fleet && skit install    # profile → ~/.ist/profiles/ , prompt → ~/.ist/prompts/global/
-cd ../..
-# 4) Claude 인증
-claude login                             # OAuth  (또는 ANTHROPIC_API_KEY / Codespaces Secret)
+# 1) snapshot CLI (npm)
+npm i -g @microwiseai/snapshot
+# 2) 누락 전제 자동설치 (tmux · Claude Code 등)
+snapshot setup                            # (CI면 snapshot setup --auto)
+# 3) IST 인증 — Google 로그인 → ~/.ist/credentials.json (@ist 레지스트리 접근)
+ist auth login
+# 4) 전제 확인 — tmux / IST CLI Auth / Claude Code / IST Credentials 전부 ✅ 여야 함
+snapshot doctor
+# 5) isesh · imessenger · skit 설치
+snapshot install @ist/beta
+# 6) parse-fleet 파서 프로필(배치 계약 포함) 설치
+cd vendor/parse-fleet && skit install && cd ../..
+# 7) Claude Code 로그인
+claude login
 ```
 
-**설치 확인:** `command -v isesh && command -v claude` (둘 다 나와야 함), `claude` 로그인 여부 확인.
+**설치 확인:** `snapshot doctor` (4개 전부 ✅) + `command -v isesh && command -v claude`.
 
 **실행 (2D 병렬 — X세션 × Y파일/요청):**
 ```bash
@@ -149,5 +154,5 @@ scripts/ , Makefile        파이프라인 스텝
 ## 문제 해결
 - `make` 가 "command not found @comfozi/…": `make setup` 을 먼저(또는 postCreate 완료 대기).
 - 파싱에서 이미지가 다 실패 후보: 정상(기본 deterministic). 이미지 파싱은 `MODE=ai`.
-- **`make parse MODE=ai` 가 `failed=전체`(ai=0):** isesh 세션을 못 띄운 것. 체크 — ① `command -v isesh`(없으면 `snapshot install @ist/beta`), ② `claude` 로그인, ③ `cd vendor/parse-fleet && skit install`(프로필). 위 "AI 파싱" 참고.
+- **`make parse MODE=ai` 가 `failed=전체`(ai=0):** AI 세션을 못 띄운 것. **먼저 `snapshot doctor`** 로 진단 — tmux/IST CLI Auth/Claude Code/IST Credentials 중 빠진 것 확인. 순서대로: `snapshot setup` → `ist auth login` → `snapshot install @ist/beta` → `cd vendor/parse-fleet && skit install` → `claude login`. 위 "AI 파싱" 참고.
 - 인박스 '파싱 결과'가 비어있음: `make parse` 후 `make inbox` 순서인지 확인(`work/parsed.json` → app/public 복사됨).
