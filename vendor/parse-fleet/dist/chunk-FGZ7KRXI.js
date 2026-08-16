@@ -813,7 +813,7 @@ function resolveAiRunner(opts) {
 }
 async function routeBatched(docs, opts, deterministic, pool, limit, batchSize) {
   const mode = opts.mode ?? "auto";
-  const results = new Array(docs.length);
+  const results = new Array(docs.length).fill(void 0);
   const aiIdx = [];
   const mk = (doc, lane, reason, extra = {}) => ({
     docId: doc.id,
@@ -859,9 +859,10 @@ async function routeBatched(docs, opts, deterministic, pool, limit, batchSize) {
       }
     });
   });
-  return results.map(
-    (r, i) => r ? { status: "fulfilled", value: r } : { status: "rejected", reason: new Error(`doc ${i} unprocessed`) }
-  );
+  return docs.map((_doc, i) => {
+    const r = results[i];
+    return r ? { status: "fulfilled", value: r } : { status: "rejected", reason: new Error(`doc ${i}: AI lane produced no result (session failed/timeout)`) };
+  });
 }
 async function parseFleet(docs, opts = {}) {
   const deterministic = opts.deterministicRunner ?? runDeterministicOne;
@@ -947,4 +948,4 @@ export {
   runPipeline,
   parseFleet
 };
-//# sourceMappingURL=chunk-S4HDHJ2E.js.map
+//# sourceMappingURL=chunk-FGZ7KRXI.js.map

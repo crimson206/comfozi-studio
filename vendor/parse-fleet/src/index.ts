@@ -8,7 +8,7 @@
  * (base 재구현 금지). 이 패키지는 라우팅·동시성·세션 수명주기만 소유한다.
  */
 import type { ParsedRow } from '@comfozi/doc-import';
-import type { DocRef, FleetOptions, FleetResult, LaneRunner, RouteDecision } from './types.js';
+import type { DocRef, FleetOptions, FleetResult, LaneOutput, LaneRunner, RouteDecision } from './types.js';
 import { routeOne, classifyFormat, isDeterministicCandidate, shouldFallback } from './router.js';
 import type { RoutedDoc } from './router.js';
 import { runDeterministicOne } from './deterministic.js';
@@ -97,7 +97,7 @@ async function routeBatched(
   batchSize: number,
 ): Promise<Settled<RoutedDoc>[]> {
   const mode = opts.mode ?? 'auto';
-  const results = new Array<RoutedDoc | undefined>(docs.length);
+  const results: (RoutedDoc | undefined)[] = new Array(docs.length).fill(undefined);
   const aiIdx: number[] = [];
   const mk = (doc: DocRef, lane: 'deterministic' | 'ai', reason: string, extra: Partial<RouteDecision> = {}): RouteDecision => ({
     docId: doc.id,
@@ -123,6 +123,7 @@ async function routeBatched(
   const batches: number[][] = [];
   for (let i = 0; i < aiIdx.length; i += batchSize) batches.push(aiIdx.slice(i, i + batchSize));
   await mapLimit(batches, limit, async (batch) => {
+    // submitBatch 가 throw(세션 실패/타임아웃)하면 이 배치 문서들은 results 미설정 → 최종 docs.map 에서 failed 로 집계된다.
     const outs = await pool.submitBatch(batch.map((idx) => docs[idx]!), opts);
     batch.forEach((idx, k) => {
       const doc = docs[idx]!;
@@ -131,9 +132,12 @@ async function routeBatched(
       try { opts.onResult?.(out, doc, idx); } catch { /* best-effort */ }
     });
   });
-  return results.map((r, i) =>
-    r ? ({ status: 'fulfilled', value: r } as Settled<RoutedDoc>) : ({ status: 'rejected', reason: new Error(`doc ${i} unprocessed`) } as Settled<RoutedDoc>),
-  );
+  return docs.map((_doc, i) => {
+    const r = results[i];
+    return (r
+      ? { status: 'fulfilled', value: r }
+      : { status: 'rejected', reason: new Error(`doc ${i}: AI lane produced no result (session failed/timeout)`) }) as Settled<RoutedDoc>;
+  });
 }
 
 export async function parseFleet(docs: readonly DocRef[], opts: FleetOptions = {}): Promise<FleetResult> {
