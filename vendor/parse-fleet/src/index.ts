@@ -9,11 +9,12 @@
  */
 import type { ParsedRow } from '@comfozi/doc-import';
 import type { DocRef, FleetOptions, FleetResult, LaneRunner, RouteDecision } from './types.js';
-import { routeOne } from './router.js';
+import { routeOne, classifyFormat, isDeterministicCandidate, shouldFallback } from './router.js';
+import type { RoutedDoc } from './router.js';
 import { runDeterministicOne } from './deterministic.js';
 import { SessionPool } from './pool.js';
 import { aggregate } from './aggregate.js';
-import { mapLimit } from './util/mapLimit.js';
+import { mapLimit, type Settled } from './util/mapLimit.js';
 
 export type {
   DocRef,
@@ -83,17 +84,74 @@ function resolveAiRunner(opts: FleetOptions): { runner: LaneRunner; pool?: Sessi
  * The AI SessionPool is warmed lazily on first fallback and torn down before
  * return — unless the caller injects `aiRunner`/`transport` (tests/offline).
  */
+/**
+ * 2D 배치 라우팅: (auto) 결정적-우선 후 폴백 문서를, (ai) 전체를 → batchSize 개씩 묶어
+ * pool.submitBatch 로 X세션 동시 처리. 이미지 합치기 없음. 배치 완료마다 onResult.
+ */
+async function routeBatched(
+  docs: readonly DocRef[],
+  opts: FleetOptions,
+  deterministic: LaneRunner,
+  pool: SessionPool,
+  limit: number,
+  batchSize: number,
+): Promise<Settled<RoutedDoc>[]> {
+  const mode = opts.mode ?? 'auto';
+  const results = new Array<RoutedDoc | undefined>(docs.length);
+  const aiIdx: number[] = [];
+  const mk = (doc: DocRef, lane: 'deterministic' | 'ai', reason: string, extra: Partial<RouteDecision> = {}): RouteDecision => ({
+    docId: doc.id,
+    filename: doc.filename ?? doc.path ?? doc.id,
+    format: classifyFormat(doc),
+    lane,
+    reason,
+    aiFallbackUsed: lane === 'ai' && mode === 'auto',
+    ...extra,
+  });
+  await mapLimit(docs, limit, async (doc, index) => {
+    const format = classifyFormat(doc);
+    if (mode === 'ai') { aiIdx.push(index); return; }
+    if (isDeterministicCandidate(format)) {
+      const out = await deterministic(doc, opts);
+      if (mode === 'auto' && shouldFallback(out, opts)) { aiIdx.push(index); return; }
+      results[index] = { decision: mk(doc, 'deterministic', 'deterministic', { deterministicRows: out.productiveRows ?? out.rows.length }), output: out };
+      try { opts.onResult?.(out, doc, index); } catch { /* best-effort */ }
+    } else {
+      aiIdx.push(index);
+    }
+  });
+  const batches: number[][] = [];
+  for (let i = 0; i < aiIdx.length; i += batchSize) batches.push(aiIdx.slice(i, i + batchSize));
+  await mapLimit(batches, limit, async (batch) => {
+    const outs = await pool.submitBatch(batch.map((idx) => docs[idx]!), opts);
+    batch.forEach((idx, k) => {
+      const doc = docs[idx]!;
+      const out = outs[k] ?? { rows: [] };
+      results[idx] = { decision: mk(doc, 'ai', mode === 'ai' ? 'forced AI (batch)' : 'ai fallback (batch)'), output: out };
+      try { opts.onResult?.(out, doc, idx); } catch { /* best-effort */ }
+    });
+  });
+  return results.map((r, i) =>
+    r ? ({ status: 'fulfilled', value: r } as Settled<RoutedDoc>) : ({ status: 'rejected', reason: new Error(`doc ${i} unprocessed`) } as Settled<RoutedDoc>),
+  );
+}
+
 export async function parseFleet(docs: readonly DocRef[], opts: FleetOptions = {}): Promise<FleetResult> {
   const deterministic: LaneRunner = opts.deterministicRunner ?? runDeterministicOne;
   const { runner: ai, pool } = resolveAiRunner(opts);
   const limit = opts.concurrency ?? 2;
 
   try {
-    const settled = await mapLimit(docs, limit, async (doc, index) => {
-      const r = await routeOne(doc, opts, deterministic, ai);
-      try { opts.onResult?.(r.output, doc, index); } catch { /* streaming is best-effort */ }
-      return r;
-    });
+    const batchSize = opts.batchSize ?? 1;
+    const mode = opts.mode ?? 'auto';
+    const settled =
+      batchSize > 1 && pool && (mode === 'ai' || mode === 'auto')
+        ? await routeBatched(docs, opts, deterministic, pool, limit, batchSize)
+        : await mapLimit(docs, limit, async (doc, index) => {
+            const r = await routeOne(doc, opts, deterministic, ai);
+            try { opts.onResult?.(r.output, doc, index); } catch { /* streaming is best-effort */ }
+            return r;
+          });
 
     const routing: RouteDecision[] = [];
     const laneRows: ParsedRow[][] = [];

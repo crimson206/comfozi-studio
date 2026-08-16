@@ -169,6 +169,7 @@ async function main(argv: string[]): Promise<void> {
       concurrency: { type: 'string' },
       sessions: { type: 'string' },
       stream: { type: 'string' },
+      batch: { type: 'string' },
       mode: { type: 'string' },
       'ai-input': { type: 'string' },
       out: { type: 'string' },
@@ -203,6 +204,7 @@ async function main(argv: string[]): Promise<void> {
 
   const mode = (values.mode ?? 'auto') as FleetMode;
   const concurrency = values.sessions ? Number(values.sessions) : values.concurrency ? Number(values.concurrency) : 2;
+  const batchSize = values.batch ? Number(values.batch) : 1;
   const aiInput = (values['ai-input'] ?? 'vision') as 'vision' | 'vision+ocr';
   if (aiInput !== 'vision' && aiInput !== 'vision+ocr') {
     process.stderr.write(`comfozi-parse-fleet: invalid --ai-input: ${aiInput}\n`);
@@ -211,7 +213,7 @@ async function main(argv: string[]): Promise<void> {
 
   const docs = await collectDocs(targets);
   process.stderr.write(
-    `comfozi-parse-fleet: ${docs.length} document(s), mode=${mode}, K=${concurrency}, ai-input=${aiInput}\n`,
+    `comfozi-parse-fleet: ${docs.length} document(s), mode=${mode}, sessions=${concurrency}, batch=${batchSize}, ai-input=${aiInput}\n`,
   );
 
   // ── run: emit run.jsonl + self-verify with foldRun ──────────────────────
@@ -260,6 +262,7 @@ async function main(argv: string[]): Promise<void> {
   const result = await parseFleet(docs, {
     mode,
     concurrency,
+    batchSize,
     aiInput,
     log: (m) => process.stderr.write(`  ${m}\n`),
     onResult: streamPath

@@ -4,6 +4,7 @@ SEED  ?= 7
 COUNT ?= 24
 MODE  ?= deterministic
 SESSIONS ?= 4
+BATCH ?= 8
 INPUT ?=
 
 .PHONY: setup generate parse train inbox all clean help
@@ -23,7 +24,7 @@ generate:
 	bash scripts/10-generate.sh $(SEED) $(COUNT)
 
 parse:
-	SESSIONS=$(SESSIONS) bash scripts/20-parse.sh $(MODE)
+	SESSIONS=$(SESSIONS) BATCH=$(BATCH) bash scripts/20-parse.sh $(MODE)
 
 train:
 	bash scripts/30-train.sh $(INPUT)

@@ -169,6 +169,11 @@ declare class SessionPool {
      * fresh-per-doc: one request per session lease, session reused across docs.
      */
     submit(doc: DocRef, _opts: FleetOptions): Promise<LaneOutput>;
+    /**
+     * 2D 배치: 여러 문서의 파일 "경로"를 한 요청으로 전달(이미지 합치기 X, 각 원본 풀해상도).
+     * 세션 하나를 lease해 batch payload 를 보내고, 응답을 docId 별 LaneOutput[] 로 분리해 반환.
+     */
+    submitBatch(docs: readonly DocRef[], _opts: FleetOptions): Promise<LaneOutput[]>;
     /** LaneRunner-compatible bound method for the router. */
     runner: (doc: DocRef, opts: FleetOptions) => Promise<LaneOutput>;
     /** Stop every session and clean tmp. Safe to call more than once. */
@@ -238,6 +243,8 @@ interface FleetOptions {
     log?: (msg: string) => void;
     /** streaming: fired as each document's lane output resolves (index = position in docs). */
     onResult?: (out: LaneOutput, doc: DocRef, index: number) => void;
+    /** AI-lane batch size Y: files-per-session-request (default 1 = per-doc). >1 = 2D batch. */
+    batchSize?: number;
 }
 /** What a lane runner returns for a single document. */
 interface LaneOutput {
@@ -462,14 +469,6 @@ interface RunPipelineResult extends FleetResult {
  */
 declare function runPipeline(docs: readonly DocRef[], opts?: RunPipelineOptions): Promise<RunPipelineResult>;
 
-/**
- * Parse a batch of documents through the fleet and return merged rows +
- * detector analyses + routing decisions. Concurrency is bounded by
- * `opts.concurrency` (default 2) across BOTH lanes.
- *
- * The AI SessionPool is warmed lazily on first fallback and torn down before
- * return — unless the caller injects `aiRunner`/`transport` (tests/offline).
- */
 declare function parseFleet(docs: readonly DocRef[], opts?: FleetOptions): Promise<FleetResult>;
 
 export { type AggregateResult, type AiInputMode, DEFAULT_PARSER_PROFILE, DETERMINISTIC_CHAIN, type DocRef, type FleetMode, type FleetOptions, type FleetResult, type Lane, type LaneOutput, type LaneRunner, type PoolTransport, type RouteDecision, RunEventEmitter, type RunPipelineOptions, type RunPipelineResult, type SessionDoneInfo, type SessionHook, SessionPool, type SessionPoolOptions, type SessionStartInfo, type Settled, aggregate, classifyFormat, extractOcrText, hasTesseract, isDeterministicCandidate, iseshTransport, mapLimit, mergeRows, normalizeAiRows, parseFleet, rasterizePdf, routeOne, runDeterministicBatch, runDeterministicOne, runPipeline, shouldFallback };

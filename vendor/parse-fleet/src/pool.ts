@@ -480,6 +480,66 @@ export class SessionPool {
     }
   }
 
+  /**
+   * 2D 배치: 여러 문서의 파일 "경로"를 한 요청으로 전달(이미지 합치기 X, 각 원본 풀해상도).
+   * 세션 하나를 lease해 batch payload 를 보내고, 응답을 docId 별 LaneOutput[] 로 분리해 반환.
+   */
+  async submitBatch(docs: readonly DocRef[], _opts: FleetOptions): Promise<LaneOutput[]> {
+    if (!this.started) await this.warm();
+    const session = await this.acquire();
+    const reqId = `${this.opts.prefix}-b${++this.counter}`;
+    const outPath = path.join(this.tmpDir, `result-${reqId}.json`);
+    const cleanup: string[] = [outPath];
+    const entries: Record<string, unknown>[] = [];
+    const meta: { docId: string; filename: string; pages: number }[] = [];
+    const t0 = Date.now();
+    try {
+      for (let i = 0; i < docs.length; i++) {
+        const doc = docs[i]!;
+        const docId = doc.id ?? `DOC-${i + 1}`;
+        const filename = doc.filename ?? doc.path ?? doc.id;
+        const bytes = doc.bytes;
+        const pdf = isPdfBytes(bytes);
+        const inputPath = path.join(this.tmpDir, `input-${reqId}-${i}${pdf ? '.pdf' : path.extname(filename) || '.png'}`);
+        await fs.writeFile(inputPath, typeof bytes === 'string' ? bytes : Buffer.from(bytes));
+        cleanup.push(inputPath);
+        let pages: string[] = [];
+        let entry: Record<string, unknown>;
+        if (pdf) {
+          pages = await rasterizePdf(inputPath, this.tmpDir, `${reqId}-${i}`, this.opts.maxPdfPages ?? 20);
+          cleanup.push(...pages);
+          entry = { docId, filename: path.basename(filename), sourceType: 'PDF', imagePaths: pages.map((p, j) => ({ path: p, page: j + 1 })) };
+        } else {
+          entry = { docId, filename: path.basename(filename), sourceType: 'IMAGE', imagePath: inputPath };
+        }
+        if (this.aiInput === 'vision+ocr') {
+          const ocr = await extractOcrText({ inputPath, isPdf: pdf, pagePngs: pages });
+          entry.ocrText = ocr.text;
+          entry.ocrSource = ocr.source;
+        }
+        entries.push(entry);
+        meta.push({ docId, filename, pages: pdf ? pages.length : 1 });
+        this.onSession?.start({ session_id: `${reqId}-${i}`, doc: path.basename(filename), backend: this.backend, pages: pdf ? pages.length : 1 });
+      }
+      await this.transport.send(session, '[DOC-EXTRACT] ' + JSON.stringify({ reqId, batch: entries, outPath }));
+      const timeout = this.timeoutMs * Math.max(1, Math.ceil(docs.length / 2));
+      const raw = (await this.transport.collect(outPath, timeout)) as { results?: Array<{ docId?: string; rows?: AiRow[]; unreadable?: string | null }> };
+      const byId = new Map<string, { rows?: AiRow[]; unreadable?: string | null }>();
+      for (const r of raw?.results ?? []) if (r && r.docId !== undefined) byId.set(String(r.docId), r);
+      return meta.map((m, i) => {
+        const res = byId.get(m.docId) ?? { rows: [] };
+        const { rows, minConfidence } = normalizeAiRows({ rows: res.rows ?? [], unreadable: res.unreadable }, m.filename);
+        const stamped = stampParser(rows, 'vision-pool', { file: m.filename, confidence: minConfidence ?? 0.8 });
+        this.onSession?.done({ session_id: `${reqId}-${i}`, duration_ms: Date.now() - t0, rows: stamped.length, ...(minConfidence !== undefined ? { self_conf: minConfidence } : {}) });
+        this.log(`pool[batch ${reqId}]: ${m.filename} -> ${stamped.length} row(s)`);
+        return { rows: stamped, minConfidence };
+      });
+    } finally {
+      for (const p of cleanup) await fs.rm(p, { force: true }).catch(() => {});
+      this.release(session);
+    }
+  }
+
   /** LaneRunner-compatible bound method for the router. */
   runner = (doc: DocRef, opts: FleetOptions): Promise<LaneOutput> => this.submit(doc, opts);
 

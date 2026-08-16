@@ -79,6 +79,8 @@ export interface FleetOptions {
   log?: (msg: string) => void;
   /** streaming: fired as each document's lane output resolves (index = position in docs). */
   onResult?: (out: LaneOutput, doc: DocRef, index: number) => void;
+  /** AI-lane batch size Y: files-per-session-request (default 1 = per-doc). >1 = 2D batch. */
+  batchSize?: number;
 }
 
 /** What a lane runner returns for a single document. */

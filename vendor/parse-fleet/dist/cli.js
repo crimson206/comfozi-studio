@@ -3,7 +3,7 @@ import {
   foldRun,
   parseFleet,
   runPipeline
-} from "./chunk-YN72GIGU.js";
+} from "./chunk-S4HDHJ2E.js";
 
 // src/cli.ts
 import { parseArgs } from "util";
@@ -137,6 +137,7 @@ async function main(argv) {
       concurrency: { type: "string" },
       sessions: { type: "string" },
       stream: { type: "string" },
+      batch: { type: "string" },
       mode: { type: "string" },
       "ai-input": { type: "string" },
       out: { type: "string" },
@@ -171,6 +172,7 @@ ${HELP}`);
   }
   const mode = values.mode ?? "auto";
   const concurrency = values.sessions ? Number(values.sessions) : values.concurrency ? Number(values.concurrency) : 2;
+  const batchSize = values.batch ? Number(values.batch) : 1;
   const aiInput = values["ai-input"] ?? "vision";
   if (aiInput !== "vision" && aiInput !== "vision+ocr") {
     process.stderr.write(`comfozi-parse-fleet: invalid --ai-input: ${aiInput}
@@ -179,7 +181,7 @@ ${HELP}`);
   }
   const docs = await collectDocs(targets);
   process.stderr.write(
-    `comfozi-parse-fleet: ${docs.length} document(s), mode=${mode}, K=${concurrency}, ai-input=${aiInput}
+    `comfozi-parse-fleet: ${docs.length} document(s), mode=${mode}, sessions=${concurrency}, batch=${batchSize}, ai-input=${aiInput}
 `
   );
   if (cmd === "run") {
@@ -224,6 +226,7 @@ ${HELP}`);
   const result = await parseFleet(docs, {
     mode,
     concurrency,
+    batchSize,
     aiInput,
     log: (m) => process.stderr.write(`  ${m}
 `),

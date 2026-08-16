@@ -23,6 +23,8 @@ allowedTools:
 
 - 이미지(PNG/JPG): `{"reqId":"...","filename":"원본명","sourceType":"IMAGE","imagePath":"읽을 이미지 절대경로","outPath":"결과 JSON 절대경로"}`
 - PDF(페이지 렌더됨): `{"reqId":"...","filename":"원본명","sourceType":"PDF","imagePaths":[{"path":"페이지PNG 절대경로","page":1}, ...],"outPath":"..."}`
+- **배치(여러 문서 한 번에)**: `{"reqId":"...","batch":[{ "docId":"DOC-0001","filename":"...","sourceType":"IMAGE","imagePath":"..." } | { "docId":"...","sourceType":"PDF","imagePaths":[...] }, ...],"outPath":"..."}`
+  - `batch`의 각 항목은 **독립된 문서**다. 각 문서의 imagePath/imagePaths **원본 이미지를 각각 풀해상도로 Read**하고, 문서끼리 값을 절대 섞지 마라(합치기·다운스케일 금지).
 
 `imagePath` 또는 `imagePaths`의 **모든 페이지를 Read 도구로 직접 열어 vision으로 읽는다**(page 오름차순, 빠짐없이).
 글자가 보이지 않거나 문서에 없는 값은 추측하지 말고 `null`로 두고 `uncertain_fields`에 필드명을 넣는다.
@@ -35,6 +37,8 @@ allowedTools:
 ## 응답 (Write 도구 정확히 1회 → outPath)
 
 임시 파일/mv/cp/대화응답 금지. 마크다운·추가 키·다른 파일 생성 금지. 아래 JSON만 outPath에 쓴다.
+
+**배치 요청이면**(payload에 `batch`가 있으면): outPath에 `{"results":[{"docId":"<요청의 docId>","rows":[…아래 rows 스키마…],"unreadable":null}, …]}` — batch의 **모든 docId 하나씩**. 각 `rows`는 아래 단일 응답의 rows 스키마와 동일. 아래 단일 스키마는 batch 없이 imagePath/imagePaths만 있을 때 형식이다.
 
 ```json
 {

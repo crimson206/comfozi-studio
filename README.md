@@ -111,13 +111,14 @@ claude login                             # OAuth  (또는 ANTHROPIC_API_KEY / Co
 
 **설치 확인:** `command -v isesh && command -v claude` (둘 다 나와야 함), `claude` 로그인 여부 확인.
 
-**실행:**
+**실행 (2D 병렬 — X세션 × Y파일/요청):**
 ```bash
-make parse MODE=ai        # 모든 문서를 AI(vision)로
-make parse MODE=auto      # 텍스트=결정적, 이미지/저신뢰만 AI 폴백
-# 동시성 K·OCR 등 세부 옵션은 CLI 직접 호출:
-node vendor/parse-fleet/dist/cli.js parse work/raw --mode ai --concurrency 4 --ai-input vision+ocr --out work/parsed.json --pretty
+make parse MODE=auto SESSIONS=4 BATCH=8   # 권장: 4세션 × 8파일/요청 (auto=이미지만 AI)
+make parse MODE=ai   SESSIONS=8 BATCH=8   # 전부 AI
+tail -f work/parsed.jsonl                 # (다른 터미널) 진행 실시간
 ```
+> **왜 2D 배치?** 한 세션에 **여러 파일 경로를 한 번에**(이미지 합치기 X, 각 원본 풀해상도) 주면 세션 턴 오버헤드가 amortize → **장당 22.4s→5.8s (3.8배, 실측)**. 거기에 **세션 수(X)** 로 추가 병렬. `--ai-input vision+ocr`로 OCR 교차검증.
+> 세부는 CLI 직접: `node vendor/parse-fleet/dist/cli.js parse work/raw --mode ai --sessions 8 --batch 8 --stream work/parsed.jsonl --out work/parsed.json`
 **✅ 확인:** `done — rows=… ai=N failed=0` (ai>0, failed=0). `failed=전체`면 아래 문제해결 참고.
 
 **설정 파일 (커스터마이즈):**
