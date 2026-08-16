@@ -78,6 +78,19 @@ make inbox
 ## AI 파싱 (선택 — 이미지/스캔까지)
 기본 파이프라인은 **로그인 없이** 돕니다(`MODE=deterministic`). 이미지·스캔(png·jpg·pdf-image·photo)까지 AI로 파싱하는 `MODE=ai`/`MODE=auto` 만 Claude가 필요합니다. parse-fleet이 **로컬 isesh 세션**(Claude vision)으로 파싱 — 본인 Claude 구독 사용, 전부 로컬.
 
+### 어떻게 동작하나 — comfozi가 쓰는 세션 도구(@ist)
+AI 파싱은 "서버 없이, 본인 Claude 구독으로" 돌리기 위해 우리 세션 툴체인을 씁니다. parse-fleet이 문서 배치를 받아 **여러 개의 Claude vision 세션에 분산**시켜 파싱합니다:
+
+| 도구 | 역할 |
+|---|---|
+| **isesh** | 통합 세션 러너. `isesh start -p <profile>` 로 Claude/Codex CLI를 **백그라운드 워커 세션**으로 띄우고 관리. parse-fleet이 문서마다 `comfozi-doc-parser` 세션을 스폰해 vision 추출. |
+| **imessenger** | 세션↔세션 메시징. 파서 세션에 `[DOC-EXTRACT]` 요청을 보내고, 세션이 Write한 결과 JSON을 파일드롭으로 수거. |
+| **skit** | 프롬프트/프로필/CLI 설치기. `comfozi-doc-parser` 프로필 + 계약 프롬프트를 `~/.ist/` 에 설치. |
+| **snapshot** | 스냅샷(`@ist/beta`)으로 위 툴체인을 **한 번에 설치**. |
+
+> 그래서 **서버 0 · 본인 Claude 구독 · 전부 로컬**. 결정적 파서로 안 되는 이미지/스캔만 이 세션 풀로 넘어갑니다.
+> (설치가 조금 걸리는 과정이라 기본 셋업/프리빌드엔 넣지 않았습니다 — 아래처럼 직접 준비하세요.)
+
 > ⚠️ **기본 `make setup` 엔 아래 AI 도구가 포함되지 않습니다.** deterministic 이 기본값이며, AI 파싱을 쓰려면 아래를 직접 준비하세요.
 
 > ⚠️ **AI 모드엔 `isesh`(@ist 세션 러너)가 필요합니다.** 미설치면 `parse --mode ai`가 세션을 못 띄워 **모든 문서가 `failed`** 로 나옵니다(=Claude Code만 깔아선 부족). @ist 툴체인 설치엔 레지스트리 접근 권한이 필요(오너/팀 환경). 일반 심사자 기본 경로는 여전히 deterministic 입니다.
