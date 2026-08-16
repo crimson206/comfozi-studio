@@ -1,0 +1,55 @@
+{
+  "name": "@comfozi/parse-fleet",
+  "version": "0.1.0",
+  "description": "병렬 문서 파싱 오케스트레이터: 결정적 파서(@comfozi/doc-import) in-process 우선 시도 → 저신뢰/저산출 문서만 isesh AI 세션 풀로 폴백 → RawRow[] 취합 + @comfozi/detectors 실행. base 재구현 금지.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "comfozi-parse-fleet": "./dist/cli.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist",
+    "prompts",
+    "skit.json"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/blaybus2026-vibe/comfozi.parse-fleet"
+  },
+  "dependencies": {
+    "@comfozi/contract": "^0.1.0",
+    "@comfozi/detectors": "^0.2.0",
+    "@comfozi/doc-import": "^0.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "tsup": "^8.5.1",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  },
+  "glpkg": {
+    "groups": {
+      "blaybus2026-vibe": [
+        "@comfozi/contract",
+        "@comfozi/detectors",
+        "@comfozi/doc-import"
+      ]
+    }
+  }
+}

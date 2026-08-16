@@ -1,0 +1,5 @@
+매입 단가 변경 내역서
+
+doc_id | source_type | supplier | raw_item_name | normalized_item_name | spec | unit | prev_unit_price | new_unit_price | effective_date
+----------------------------------------------------------------------------------------------------------------------------------------
+GEN-0019 | IMAGE | 새봄식품(예시) | 냉동새우살900 | 냉동 새우살 | 900g×10PK/BOX | BOX | 124,000 | 125,058 | 2026-08-07

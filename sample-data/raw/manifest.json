@@ -1,0 +1,2934 @@
+{
+  "generator": "@comfozi/data-raw",
+  "seed": 42,
+  "count": 36,
+  "mix": {
+    "clean": 0.34,
+    "noisy": 0.33,
+    "hard": 0.33
+  },
+  "summary": {
+    "byFormat": {
+      "csv": 3,
+      "xlsx": 3,
+      "json": 3,
+      "txt": 3,
+      "eml": 3,
+      "html": 3,
+      "md": 3,
+      "pdf-text": 3,
+      "pdf-image": 3,
+      "png": 3,
+      "jpg": 3,
+      "photo": 3
+    },
+    "byTier": {
+      "tier0": 9,
+      "tier1": 15,
+      "tier2": 12
+    },
+    "byDifficulty": {
+      "clean": 12,
+      "noisy": 12,
+      "hard": 12
+    },
+    "totalTruthRows": 138
+  },
+  "docs": [
+    {
+      "id": "F00001",
+      "file": "F00001_csv.csv",
+      "format": "csv",
+      "tier": 0,
+      "difficulty": "clean",
+      "levers": [
+        "header:ko",
+        "delim:comma",
+        "currency:plain",
+        "colorder:canonical"
+      ],
+      "bytesLen": 721,
+      "binary": false,
+      "truth": [
+        {
+          "doc_id": "GEN-0001",
+          "source_type": "수기",
+          "supplier": "바다원(예시)",
+          "raw_item_name": "체다슬라이스",
+          "normalized_item_name": "체다 슬라이스",
+          "spec": "1kg×10PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "41000",
+          "new_unit_price": "56421",
+          "effective_date": "",
+          "__source": {
+            "file": "synthetic",
+            "row": 1
+          }
+        },
+        {
+          "doc_id": "GEN-0002",
+          "source_type": "PDF",
+          "supplier": "한결유통(예시)",
+          "raw_item_name": "슈레드치즈2.5K",
+          "normalized_item_name": "슈레드 치즈",
+          "spec": "",
+          "unit": "",
+          "prev_unit_price": "99000",
+          "new_unit_price": "",
+          "effective_date": "2026-08-03",
+          "__source": {
+            "file": "synthetic",
+            "row": 2
+          }
+        },
+        {
+          "doc_id": "GEN-0003",
+          "source_type": "IMAGE",
+          "supplier": "푸른포장(예시)",
+          "raw_item_name": "자스민쌀10K",
+          "normalized_item_name": "자스민쌀",
+          "spec": "10kg/PO",
+          "unit": "PO",
+          "prev_unit_price": "38500",
+          "new_unit_price": "37916",
+          "effective_date": "2026-08-15",
+          "__source": {
+            "file": "synthetic",
+            "row": 3
+          }
+        },
+        {
+          "doc_id": "GEN-0004",
+          "source_type": "IMAGE",
+          "supplier": "푸른포장(예시)",
+          "raw_item_name": "자스민쌀10K",
+          "normalized_item_name": "자스민쌀",
+          "spec": "10kg/PO",
+          "unit": "PO",
+          "prev_unit_price": "38500",
+          "new_unit_price": "37916",
+          "effective_date": "2026-08-15",
+          "__source": {
+            "file": "synthetic",
+            "row": 4
+          }
+        },
+        {
+          "doc_id": "GEN-0005",
+          "source_type": "XLSX",
+          "supplier": "바다원(예시)",
+          "raw_item_name": "자스민쌀10K",
+          "normalized_item_name": "자스민쌀",
+          "spec": "10kg/PO",
+          "unit": "PO",
+          "prev_unit_price": "36500",
+          "new_unit_price": "36127",
+          "effective_date": "2026-08-10",
+          "__source": {
+            "file": "synthetic",
+            "row": 5
+          }
+        },
+        {
+          "doc_id": "GEN-0006",
+          "source_type": "XLSX",
+          "supplier": "바다원(예시)",
+          "raw_item_name": "자스민쌀10K (재견적)",
+          "normalized_item_name": "자스민쌀",
+          "spec": "10kg/PO",
+          "unit": "PO",
+          "prev_unit_price": "36500",
+          "new_unit_price": "37127",
+          "effective_date": "2026-08-10",
+          "__source": {
+            "file": "synthetic",
+            "row": 6
+          }
+        }
+      ]
+    },
+    {
+      "id": "F00002",
+      "file": "F00002_xlsx.xlsx",
+      "format": "xlsx",
+      "tier": 0,
+      "difficulty": "clean",
+      "levers": [
+        "header:ko",
+        "currency:plain",
+        "colorder:canonical"
+      ],
+      "bytesLen": 9254,
+      "binary": true,
+      "truth": [
+        {
+          "doc_id": "GEN-0007",
+          "source_type": "수기",
+          "supplier": "새봄식품(예시)",
+          "raw_item_name": "사워크림1K",
+          "normalized_item_name": "사워크림",
+          "spec": "기존 10kg / 변경 9kg",
+          "unit": "BOX",
+          "prev_unit_price": "55000",
+          "new_unit_price": "57989",
+          "effective_date": "2026-08-03",
+          "__source": {
+            "file": "synthetic",
+            "row": 7
+          }
+        },
+        {
+          "doc_id": "GEN-0008",
+          "source_type": "수기",
+          "supplier": "푸른포장(예시)",
+          "raw_item_name": "사워크림1K",
+          "normalized_item_name": "사워크림",
+          "spec": "기존 5kg / 변경 4.5kg",
+          "unit": "BOX",
+          "prev_unit_price": "53500",
+          "new_unit_price": "68152",
+          "effective_date": "2026-08-01",
+          "__source": {
+            "file": "synthetic",
+            "row": 8
+          }
+        },
+        {
+          "doc_id": "GEN-0009",
+          "source_type": "XLSX",
+          "supplier": "바다원(예시)",
+          "raw_item_name": "냉동새우살900",
+          "normalized_item_name": "냉동 새우살",
+          "spec": "900g×10PK/BOX",
+          "unit": "EA/BOX",
+          "prev_unit_price": "125500",
+          "new_unit_price": "132839",
+          "effective_date": "2026-08-03",
+          "__source": {
+            "file": "synthetic",
+            "row": 9
+          }
+        }
+      ]
+    },
+    {
+      "id": "F00003",
+      "file": "F00003_json.json",
+      "format": "json",
+      "tier": 0,
+      "difficulty": "clean",
+      "levers": [
+        "keys:en",
+        "currency:plain",
+        "colorder:canonical",
+        "indent:2"
+      ],
+      "bytesLen": 3009,
+      "binary": false,
+      "truth": [
+        {
+          "doc_id": "GEN-0010",
+          "source_type": "IMAGE",
+          "supplier": "바다원(예시)",
+          "raw_item_name": "블랙빈2.5K",
+          "normalized_item_name": "블랙빈",
+          "spec": "기존 1kg / 변경 4단",
+          "unit": "KG/단",
+          "prev_unit_price": "60000",
+          "new_unit_price": "62894",
+          "effective_date": "2026-08-15",
+          "__source": {
+            "file": "synthetic",
+            "row": 10
+          }
+        },
+        {
+          "doc_id": "GEN-0011",
+          "source_type": "PDF",
+          "supplier": "새봄식품(예시)",
+          "raw_item_name": "냉동감자튀김2K",
+          "normalized_item_name": "냉동 감자튀김",
+          "spec": "2kg×6PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "43500",
+          "new_unit_price": "43283",
+          "effective_date": "2026-08-07",
+          "__source": {
+            "file": "synthetic",
+            "row": 11
+          }
+        },
+        {
+          "doc_id": "GEN-0012",
+          "source_type": "PDF",
+          "supplier": "가온푸드(예시)",
+          "raw_item_name": "밀또띠아10인치",
+          "normalized_item_name": "밀 또띠아 10인치",
+          "spec": "12매×10PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "37000",
+          "new_unit_price": "49804",
+          "effective_date": "2026-08-18",
+          "__source": {
+            "file": "synthetic",
+            "row": 12
+          }
+        },
+        {
+          "doc_id": "GEN-0013",
+          "source_type": "수기",
+          "supplier": "한결유통(예시)",
+          "raw_item_name": "라임30과",
+          "normalized_item_name": "라임",
+          "spec": "30EA/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "30000",
+          "new_unit_price": "30371",
+          "effective_date": "2026-08-18",
+          "__source": {
+            "file": "synthetic",
+            "row": 13
+          }
+        },
+        {
+          "doc_id": "GEN-0014",
+          "source_type": "PDF",
+          "supplier": "바다원(예시)",
+          "raw_item_name": "나초칩454G",
+          "normalized_item_name": "나초칩",
+          "spec": "454g×12PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "47500",
+          "new_unit_price": "47327",
+          "effective_date": "2026-08-12",
+          "__source": {
+            "file": "synthetic",
+            "row": 14
+          }
+        },
+        {
+          "doc_id": "GEN-0015",
+          "source_type": "XLSX",
+          "supplier": "가온푸드(예시)",
+          "raw_item_name": "라임30과",
+          "normalized_item_name": "라임",
+          "spec": "30EA/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "30500",
+          "new_unit_price": "30591",
+          "effective_date": "2026-08-05",
+          "__source": {
+            "file": "synthetic",
+            "row": 15
+          }
+        },
+        {
+          "doc_id": "GEN-0016",
+          "source_type": "수기",
+          "supplier": "새봄식품(예시)",
+          "raw_item_name": "아보카도30입",
+          "normalized_item_name": "아보카도",
+          "spec": "30EA/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "66500",
+          "new_unit_price": "68576",
+          "effective_date": "2026-08-03",
+          "__source": {
+            "file": "synthetic",
+            "row": 16
+          }
+        },
+        {
+          "doc_id": "GEN-0017",
+          "source_type": "IMAGE",
+          "supplier": "가온푸드(예시)",
+          "raw_item_name": "할라피뇨슬라이스",
+          "normalized_item_name": "할라피뇨 슬라이스",
+          "spec": "3kg×6CAN/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "73000",
+          "new_unit_price": "94137",
+          "effective_date": "2026-08-07",
+          "__source": {
+            "file": "synthetic",
+            "row": 17
+          }
+        },
+        {
+          "doc_id": "GEN-0018",
+          "source_type": "PDF",
+          "supplier": "바다원(예시)",
+          "raw_item_name": "올리브오일3L",
+          "normalized_item_name": "올리브 오일",
+          "spec": "3L×4EA/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "71500",
+          "new_unit_price": "91104",
+          "effective_date": "2026-08-18",
+          "__source": {
+            "file": "synthetic",
+            "row": 18
+          }
+        }
+      ]
+    },
+    {
+      "id": "F00004",
+      "file": "F00004_txt.txt",
+      "format": "txt",
+      "tier": 1,
+      "difficulty": "clean",
+      "levers": [
+        "fmt:txt",
+        "label:en",
+        "currency:comma",
+        "colorder:canonical",
+        "notices:0"
+      ],
+      "bytesLen": 442,
+      "binary": false,
+      "truth": [
+        {
+          "doc_id": "GEN-0019",
+          "source_type": "IMAGE",
+          "supplier": "새봄식품(예시)",
+          "raw_item_name": "냉동새우살900",
+          "normalized_item_name": "냉동 새우살",
+          "spec": "900g×10PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "124000",
+          "new_unit_price": "125058",
+          "effective_date": "2026-08-07",
+          "__source": {
+            "file": "synthetic",
+            "row": 19
+          }
+        }
+      ]
+    },
+    {
+      "id": "F00005",
+      "file": "F00005_eml.eml",
+      "format": "eml",
+      "tier": 1,
+      "difficulty": "clean",
+      "levers": [
+        "fmt:eml",
+        "label:ko",
+        "currency:plain",
+        "colorder:canonical",
+        "notices:0",
+        "encoding:8bit"
+      ],
+      "bytesLen": 1054,
+      "binary": false,
+      "truth": [
+        {
+          "doc_id": "GEN-0020",
+          "source_type": "XLSX",
+          "supplier": "가온푸드(예시)",
+          "raw_item_name": "자스민쌀10K",
+          "normalized_item_name": "자스민쌀",
+          "spec": "10kg/PO",
+          "unit": "PO",
+          "prev_unit_price": "37500",
+          "new_unit_price": "39439",
+          "effective_date": "2026-08-07",
+          "__source": {
+            "file": "synthetic",
+            "row": 20
+          }
+        },
+        {
+          "doc_id": "GEN-0021",
+          "source_type": "PDF",
+          "supplier": "새봄식품(예시)",
+          "raw_item_name": "냉동블루베리1K",
+          "normalized_item_name": "냉동 블루베리",
+          "spec": "1kg×10PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "54500",
+          "new_unit_price": "54576",
+          "effective_date": "2026-08-03",
+          "__source": {
+            "file": "synthetic",
+            "row": 21
+          }
+        },
+        {
+          "doc_id": "GEN-0022",
+          "source_type": "IMAGE",
+          "supplier": "한결유통(예시)",
+          "raw_item_name": "밀또띠아10인치",
+          "normalized_item_name": "밀 또띠아 10인치",
+          "spec": "12매×10PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "37000",
+          "new_unit_price": "36714",
+          "effective_date": "2026-08-01",
+          "__source": {
+            "file": "synthetic",
+            "row": 22
+          }
+        },
+        {
+          "doc_id": "GEN-0023",
+          "source_type": "IMAGE",
+          "supplier": "새봄식품(예시)",
+          "raw_item_name": "토마토살사S/O",
+          "normalized_item_name": "토마토 살사 소스",
+          "spec": "4kg/PK",
+          "unit": "PK",
+          "prev_unit_price": "30500",
+          "new_unit_price": "39429",
+          "effective_date": "2026-08-03",
+          "__source": {
+            "file": "synthetic",
+            "row": 23
+          }
+        },
+        {
+          "doc_id": "GEN-0024",
+          "source_type": "수기",
+          "supplier": "바다원(예시)",
+          "raw_item_name": "슈레드치즈2.5K",
+          "normalized_item_name": "슈레드 치즈",
+          "spec": "2.5kg×4PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "98000",
+          "new_unit_price": "102177",
+          "effective_date": "2026-08-10",
+          "__source": {
+            "file": "synthetic",
+            "row": 24
+          }
+        }
+      ]
+    },
+    {
+      "id": "F00006",
+      "file": "F00006_html.html",
+      "format": "html",
+      "tier": 1,
+      "difficulty": "clean",
+      "levers": [
+        "fmt:html",
+        "label:en",
+        "currency:comma",
+        "colorder:canonical",
+        "notices:0"
+      ],
+      "bytesLen": 653,
+      "binary": false,
+      "truth": [
+        {
+          "doc_id": "GEN-0025",
+          "source_type": "수기",
+          "supplier": "푸른포장(예시)",
+          "raw_item_name": "할라피뇨슬라이스",
+          "normalized_item_name": "할라피뇨 슬라이스",
+          "spec": "3kg×6CAN/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "70500",
+          "new_unit_price": "72387",
+          "effective_date": "2026-08-18",
+          "__source": {
+            "file": "synthetic",
+            "row": 25
+          }
+        }
+      ]
+    },
+    {
+      "id": "F00007",
+      "file": "F00007_md.md",
+      "format": "md",
+      "tier": 1,
+      "difficulty": "clean",
+      "levers": [
+        "fmt:md",
+        "label:en",
+        "currency:comma",
+        "colorder:canonical",
+        "notices:0"
+      ],
+      "bytesLen": 625,
+      "binary": false,
+      "truth": [
+        {
+          "doc_id": "GEN-0026",
+          "source_type": "수기",
+          "supplier": "한결유통(예시)",
+          "raw_item_name": "아보카도30입",
+          "normalized_item_name": "아보카도",
+          "spec": "30EA/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "65000",
+          "new_unit_price": "67506",
+          "effective_date": "2026-08-03",
+          "__source": {
+            "file": "synthetic",
+            "row": 26
+          }
+        },
+        {
+          "doc_id": "GEN-0027",
+          "source_type": "수기",
+          "supplier": "새봄식품(예시)",
+          "raw_item_name": "올리브오일3L",
+          "normalized_item_name": "올리브 오일",
+          "spec": "3L×4EA/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "70500",
+          "new_unit_price": "93324",
+          "effective_date": "2026-08-10",
+          "__source": {
+            "file": "synthetic",
+            "row": 27
+          }
+        },
+        {
+          "doc_id": "GEN-0028",
+          "source_type": "IMAGE",
+          "supplier": "새봄식품(예시)",
+          "raw_item_name": "체다슬라이스",
+          "normalized_item_name": "체다 슬라이스",
+          "spec": "1kg×10PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "41000",
+          "new_unit_price": "40858",
+          "effective_date": "2026-08-15",
+          "__source": {
+            "file": "synthetic",
+            "row": 28
+          }
+        }
+      ]
+    },
+    {
+      "id": "F00008",
+      "file": "F00008_pdf-text.pdf",
+      "format": "pdf-text",
+      "tier": 1,
+      "difficulty": "clean",
+      "levers": [
+        "fmt:pdf-text",
+        "label:en",
+        "currency:comma",
+        "colorder:canonical",
+        "notices:0",
+        "font:embedded-kr"
+      ],
+      "bytesLen": 18393,
+      "binary": true,
+      "truth": [
+        {
+          "doc_id": "GEN-0029",
+          "source_type": "수기",
+          "supplier": "한결유통(예시)",
+          "raw_item_name": "사워크림1K",
+          "normalized_item_name": "사워크림",
+          "spec": "1kg×6PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "53500",
+          "new_unit_price": "52701",
+          "effective_date": "2026-08-07",
+          "__source": {
+            "file": "synthetic",
+            "row": 29
+          }
+        },
+        {
+          "doc_id": "GEN-0030",
+          "source_type": "XLSX",
+          "supplier": "새봄식품(예시)",
+          "raw_item_name": "로메인쉬레드",
+          "normalized_item_name": "로메인 쉬레드",
+          "spec": "1kg/PK",
+          "unit": "PK",
+          "prev_unit_price": "8000",
+          "new_unit_price": "8479",
+          "effective_date": "2026-08-05",
+          "__source": {
+            "file": "synthetic",
+            "row": 30
+          }
+        }
+      ]
+    },
+    {
+      "id": "F00009",
+      "file": "F00009_pdf-image.pdf",
+      "format": "pdf-image",
+      "tier": 2,
+      "difficulty": "clean",
+      "levers": [
+        "fmt:pdf-image",
+        "scan:image-only",
+        "label:ko",
+        "currency:plain",
+        "colorder:canonical",
+        "notices:0"
+      ],
+      "bytesLen": 22215,
+      "binary": true,
+      "truth": [
+        {
+          "doc_id": "GEN-0031",
+          "source_type": "XLSX",
+          "supplier": "가온푸드(예시)",
+          "raw_item_name": "냉동블루베리1K",
+          "normalized_item_name": "냉동 블루베리",
+          "spec": "1kg×10PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "56000",
+          "new_unit_price": "41308",
+          "effective_date": "2026-08-12",
+          "__source": {
+            "file": "synthetic",
+            "row": 31
+          }
+        },
+        {
+          "doc_id": "GEN-0032",
+          "source_type": "수기",
+          "supplier": "한결유통(예시)",
+          "raw_item_name": "스모크BBQ소스",
+          "normalized_item_name": "스모크 바비큐소스",
+          "spec": "2kg×6PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "59000",
+          "new_unit_price": "61466",
+          "effective_date": "2026-08-03",
+          "__source": {
+            "file": "synthetic",
+            "row": 32
+          }
+        }
+      ]
+    },
+    {
+      "id": "F00010",
+      "file": "F00010_png.png",
+      "format": "png",
+      "tier": 2,
+      "difficulty": "clean",
+      "levers": [
+        "fmt:png",
+        "label:en",
+        "currency:comma",
+        "colorder:canonical",
+        "notices:0",
+        "font:embedded-kr"
+      ],
+      "bytesLen": 30817,
+      "binary": true,
+      "truth": [
+        {
+          "doc_id": "GEN-0033",
+          "source_type": "PDF",
+          "supplier": "푸른포장(예시)",
+          "raw_item_name": "슈레드치즈2.5K",
+          "normalized_item_name": "슈레드 치즈",
+          "spec": "2.5kg×4PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "99000",
+          "new_unit_price": "98518",
+          "effective_date": "2026-08-15",
+          "__source": {
+            "file": "synthetic",
+            "row": 33
+          }
+        },
+        {
+          "doc_id": "GEN-0034",
+          "source_type": "수기",
+          "supplier": "푸른포장(예시)",
+          "raw_item_name": "냉동감자튀김2K",
+          "normalized_item_name": "냉동 감자튀김",
+          "spec": "2kg×6PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "46500",
+          "new_unit_price": "47644",
+          "effective_date": "2026-08-10",
+          "__source": {
+            "file": "synthetic",
+            "row": 34
+          }
+        },
+        {
+          "doc_id": "GEN-0035",
+          "source_type": "XLSX",
+          "supplier": "가온푸드(예시)",
+          "raw_item_name": "스모크BBQ소스",
+          "normalized_item_name": "스모크 바비큐소스",
+          "spec": "2kg×6PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "58000",
+          "new_unit_price": "59587",
+          "effective_date": "2026-08-05",
+          "__source": {
+            "file": "synthetic",
+            "row": 35
+          }
+        }
+      ]
+    },
+    {
+      "id": "F00011",
+      "file": "F00011_jpg.jpg",
+      "format": "jpg",
+      "tier": 2,
+      "difficulty": "clean",
+      "levers": [
+        "fmt:jpg",
+        "label:en",
+        "currency:plain",
+        "colorder:canonical",
+        "notices:0",
+        "jpeg:q87",
+        "font:embedded-kr"
+      ],
+      "bytesLen": 18840,
+      "binary": true,
+      "truth": [
+        {
+          "doc_id": "GEN-0036",
+          "source_type": "IMAGE",
+          "supplier": "새봄식품(예시)",
+          "raw_item_name": "할라피뇨슬라이스",
+          "normalized_item_name": "할라피뇨 슬라이스",
+          "spec": "3kg×6CAN/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "72000",
+          "new_unit_price": "72393",
+          "effective_date": "2026-08-01",
+          "__source": {
+            "file": "synthetic",
+            "row": 36
+          }
+        }
+      ]
+    },
+    {
+      "id": "F00012",
+      "file": "F00012_photo.jpg",
+      "format": "photo",
+      "tier": 2,
+      "difficulty": "clean",
+      "levers": [
+        "fmt:photo",
+        "label:ko",
+        "currency:plain",
+        "colorder:canonical",
+        "notices:0",
+        "rotate:-1.1deg",
+        "lowdpi:0.87",
+        "jpeg:q82",
+        "font:embedded-kr"
+      ],
+      "bytesLen": 11628,
+      "binary": true,
+      "truth": [
+        {
+          "doc_id": "GEN-0037",
+          "source_type": "PDF",
+          "supplier": "한결유통(예시)",
+          "raw_item_name": "나초칩454G",
+          "normalized_item_name": "나초칩",
+          "spec": "454g×12PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "47000",
+          "new_unit_price": "46713",
+          "effective_date": "2026-08-05",
+          "__source": {
+            "file": "synthetic",
+            "row": 37
+          }
+        }
+      ]
+    },
+    {
+      "id": "F00013",
+      "file": "F00013_csv.csv",
+      "format": "csv",
+      "tier": 0,
+      "difficulty": "noisy",
+      "levers": [
+        "header:ko",
+        "delim:semicolon",
+        "currency:won",
+        "colorder:canonical"
+      ],
+      "bytesLen": 1590,
+      "binary": false,
+      "truth": [
+        {
+          "doc_id": "GEN-0001",
+          "source_type": "수기",
+          "supplier": "가온푸드(예시)",
+          "raw_item_name": "체다슬라이스",
+          "normalized_item_name": "체다 슬라이스",
+          "spec": "1kg×10PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "42500",
+          "new_unit_price": "43373",
+          "effective_date": "",
+          "__source": {
+            "file": "synthetic",
+            "row": 1
+          }
+        },
+        {
+          "doc_id": "GEN-0002",
+          "source_type": "XLSX",
+          "supplier": "바다원(예시)",
+          "raw_item_name": "냉동감자튀김2K",
+          "normalized_item_name": "냉동 감자튀김",
+          "spec": "",
+          "unit": "",
+          "prev_unit_price": "45500",
+          "new_unit_price": "",
+          "effective_date": "2026-08-07",
+          "__source": {
+            "file": "synthetic",
+            "row": 2
+          }
+        },
+        {
+          "doc_id": "GEN-0003",
+          "source_type": "IMAGE",
+          "supplier": "푸른포장(예시)",
+          "raw_item_name": "밀또띠아10인치",
+          "normalized_item_name": "밀 또띠아 10인치",
+          "spec": "12매×10PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "37500",
+          "new_unit_price": "36767",
+          "effective_date": "2026-08-12",
+          "__source": {
+            "file": "synthetic",
+            "row": 3
+          }
+        },
+        {
+          "doc_id": "GEN-0004",
+          "source_type": "IMAGE",
+          "supplier": "푸른포장(예시)",
+          "raw_item_name": "밀또띠아10인치",
+          "normalized_item_name": "밀 또띠아 10인치",
+          "spec": "12매×10PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "37500",
+          "new_unit_price": "36767",
+          "effective_date": "2026-08-12",
+          "__source": {
+            "file": "synthetic",
+            "row": 4
+          }
+        },
+        {
+          "doc_id": "GEN-0005",
+          "source_type": "XLSX",
+          "supplier": "새봄식품(예시)",
+          "raw_item_name": "스모크BBQ소스",
+          "normalized_item_name": "스모크 바비큐소스",
+          "spec": "2kg×6PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "59500",
+          "new_unit_price": "40142",
+          "effective_date": "2026-08-15",
+          "__source": {
+            "file": "synthetic",
+            "row": 5
+          }
+        },
+        {
+          "doc_id": "GEN-0006",
+          "source_type": "XLSX",
+          "supplier": "새봄식품(예시)",
+          "raw_item_name": "스모크BBQ소스 (재견적)",
+          "normalized_item_name": "스모크 바비큐소스",
+          "spec": "2kg×6PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "59500",
+          "new_unit_price": "41142",
+          "effective_date": "2026-08-15",
+          "__source": {
+            "file": "synthetic",
+            "row": 6
+          }
+        },
+        {
+          "doc_id": "GEN-0007",
+          "source_type": "수기",
+          "supplier": "바다원(예시)",
+          "raw_item_name": "블랙빈2.5K",
+          "normalized_item_name": "블랙빈",
+          "spec": "기존 10kg / 변경 9kg",
+          "unit": "BOX",
+          "prev_unit_price": "58500",
+          "new_unit_price": "57537",
+          "effective_date": "2026-08-10",
+          "__source": {
+            "file": "synthetic",
+            "row": 7
+          }
+        },
+        {
+          "doc_id": "GEN-0008",
+          "source_type": "수기",
+          "supplier": "푸른포장(예시)",
+          "raw_item_name": "올리브오일3L",
+          "normalized_item_name": "올리브 오일",
+          "spec": "기존 5kg / 변경 4.5kg",
+          "unit": "BOX",
+          "prev_unit_price": "73000",
+          "new_unit_price": "76394",
+          "effective_date": "2026-08-01",
+          "__source": {
+            "file": "synthetic",
+            "row": 8
+          }
+        },
+        {
+          "doc_id": "GEN-0009",
+          "source_type": "IMAGE",
+          "supplier": "푸른포장(예시)",
+          "raw_item_name": "자스민쌀10K",
+          "normalized_item_name": "자스민쌀",
+          "spec": "10kg/PO",
+          "unit": "EA/BOX",
+          "prev_unit_price": "38500",
+          "new_unit_price": "39704",
+          "effective_date": "2026-08-05",
+          "__source": {
+            "file": "synthetic",
+            "row": 9
+          }
+        },
+        {
+          "doc_id": "GEN-0010",
+          "source_type": "IMAGE",
+          "supplier": "바다원(예시)",
+          "raw_item_name": "라임30과",
+          "normalized_item_name": "라임",
+          "spec": "기존 1kg / 변경 4단",
+          "unit": "KG/단",
+          "prev_unit_price": "30500",
+          "new_unit_price": "31876",
+          "effective_date": "2026-08-10",
+          "__source": {
+            "file": "synthetic",
+            "row": 10
+          }
+        },
+        {
+          "doc_id": "GEN-0011",
+          "source_type": "XLSX",
+          "supplier": "바다원(예시)",
+          "raw_item_name": "허브염지닭정육",
+          "normalized_item_name": "허브 염지 닭정육",
+          "spec": "2kg×6PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "83000",
+          "new_unit_price": "83451",
+          "effective_date": "2026-08-03",
+          "__source": {
+            "file": "synthetic",
+            "row": 11
+          }
+        },
+        {
+          "doc_id": "GEN-0012",
+          "source_type": "PDF",
+          "supplier": "한결유통(예시)",
+          "raw_item_name": "로메인쉬레드",
+          "normalized_item_name": "로메인 쉬레드",
+          "spec": "1kg/PK",
+          "unit": "PK",
+          "prev_unit_price": "10000",
+          "new_unit_price": "9892",
+          "effective_date": "2026-08-12",
+          "__source": {
+            "file": "synthetic",
+            "row": 12
+          }
+        }
+      ]
+    },
+    {
+      "id": "F00014",
+      "file": "F00014_xlsx.xlsx",
+      "format": "xlsx",
+      "tier": 0,
+      "difficulty": "noisy",
+      "levers": [
+        "header:en",
+        "currency:plain",
+        "colorder:canonical"
+      ],
+      "bytesLen": 9964,
+      "binary": true,
+      "truth": [
+        {
+          "doc_id": "GEN-0013",
+          "source_type": "XLSX",
+          "supplier": "한결유통(예시)",
+          "raw_item_name": "블랙빈2.5K",
+          "normalized_item_name": "블랙빈",
+          "spec": "2.5kg×6CAN/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "60000",
+          "new_unit_price": "58946",
+          "effective_date": "2026-08-10",
+          "__source": {
+            "file": "synthetic",
+            "row": 13
+          }
+        },
+        {
+          "doc_id": "GEN-0014",
+          "source_type": "IMAGE",
+          "supplier": "가온푸드(예시)",
+          "raw_item_name": "슈레드치즈2.5K",
+          "normalized_item_name": "슈레드 치즈",
+          "spec": "2.5kg×4PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "98500",
+          "new_unit_price": "102681",
+          "effective_date": "2026-08-15",
+          "__source": {
+            "file": "synthetic",
+            "row": 14
+          }
+        },
+        {
+          "doc_id": "GEN-0015",
+          "source_type": "수기",
+          "supplier": "새봄식품(예시)",
+          "raw_item_name": "라임30과",
+          "normalized_item_name": "라임",
+          "spec": "30EA/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "28500",
+          "new_unit_price": "28993",
+          "effective_date": "2026-08-01",
+          "__source": {
+            "file": "synthetic",
+            "row": 15
+          }
+        },
+        {
+          "doc_id": "GEN-0016",
+          "source_type": "XLSX",
+          "supplier": "푸른포장(예시)",
+          "raw_item_name": "할라피뇨슬라이스",
+          "normalized_item_name": "할라피뇨 슬라이스",
+          "spec": "3kg×6CAN/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "73000",
+          "new_unit_price": "73033",
+          "effective_date": "2026-08-12",
+          "__source": {
+            "file": "synthetic",
+            "row": 16
+          }
+        },
+        {
+          "doc_id": "GEN-0017",
+          "source_type": "PDF",
+          "supplier": "한결유통(예시)",
+          "raw_item_name": "밀또띠아10인치",
+          "normalized_item_name": "밀 또띠아 10인치",
+          "spec": "12매×10PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "36000",
+          "new_unit_price": "36187",
+          "effective_date": "2026-08-10",
+          "__source": {
+            "file": "synthetic",
+            "row": 17
+          }
+        },
+        {
+          "doc_id": "GEN-0018",
+          "source_type": "IMAGE",
+          "supplier": "가온푸드(예시)",
+          "raw_item_name": "블랙빈2.5K",
+          "normalized_item_name": "블랙빈",
+          "spec": "2.5kg×6CAN/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "61000",
+          "new_unit_price": "63794",
+          "effective_date": "2026-08-15",
+          "__source": {
+            "file": "synthetic",
+            "row": 18
+          }
+        },
+        {
+          "doc_id": "GEN-0019",
+          "source_type": "XLSX",
+          "supplier": "가온푸드(예시)",
+          "raw_item_name": "라임30과",
+          "normalized_item_name": "라임",
+          "spec": "30EA/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "28500",
+          "new_unit_price": "29979",
+          "effective_date": "2026-08-18",
+          "__source": {
+            "file": "synthetic",
+            "row": 19
+          }
+        },
+        {
+          "doc_id": "GEN-0020",
+          "source_type": "XLSX",
+          "supplier": "바다원(예시)",
+          "raw_item_name": "할라피뇨슬라이스",
+          "normalized_item_name": "할라피뇨 슬라이스",
+          "spec": "3kg×6CAN/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "73500",
+          "new_unit_price": "73697",
+          "effective_date": "2026-08-01",
+          "__source": {
+            "file": "synthetic",
+            "row": 20
+          }
+        }
+      ]
+    },
+    {
+      "id": "F00015",
+      "file": "F00015_json.json",
+      "format": "json",
+      "tier": 0,
+      "difficulty": "noisy",
+      "levers": [
+        "keys:en",
+        "currency:comma",
+        "colorder:canonical",
+        "indent:0"
+      ],
+      "bytesLen": 1109,
+      "binary": false,
+      "truth": [
+        {
+          "doc_id": "GEN-0021",
+          "source_type": "IMAGE",
+          "supplier": "가온푸드(예시)",
+          "raw_item_name": "할라피뇨슬라이스",
+          "normalized_item_name": "할라피뇨 슬라이스",
+          "spec": "3kg×6CAN/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "71000",
+          "new_unit_price": "70307",
+          "effective_date": "2026-08-10",
+          "__source": {
+            "file": "synthetic",
+            "row": 21
+          }
+        },
+        {
+          "doc_id": "GEN-0022",
+          "source_type": "PDF",
+          "supplier": "바다원(예시)",
+          "raw_item_name": "올리브오일3L",
+          "normalized_item_name": "올리브 오일",
+          "spec": "3L×4EA/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "70500",
+          "new_unit_price": "73251",
+          "effective_date": "2026-08-10",
+          "__source": {
+            "file": "synthetic",
+            "row": 22
+          }
+        },
+        {
+          "doc_id": "GEN-0023",
+          "source_type": "PDF",
+          "supplier": "새봄식품(예시)",
+          "raw_item_name": "올리브오일3L",
+          "normalized_item_name": "올리브 오일",
+          "spec": "3L×4EA/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "71500",
+          "new_unit_price": "73651",
+          "effective_date": "2026-08-05",
+          "__source": {
+            "file": "synthetic",
+            "row": 23
+          }
+        },
+        {
+          "doc_id": "GEN-0024",
+          "source_type": "XLSX",
+          "supplier": "한결유통(예시)",
+          "raw_item_name": "냉동새우살900",
+          "normalized_item_name": "냉동 새우살",
+          "spec": "900g×10PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "125000",
+          "new_unit_price": "130488",
+          "effective_date": "2026-08-07",
+          "__source": {
+            "file": "synthetic",
+            "row": 24
+          }
+        }
+      ]
+    },
+    {
+      "id": "F00016",
+      "file": "F00016_txt.txt",
+      "format": "txt",
+      "tier": 1,
+      "difficulty": "noisy",
+      "levers": [
+        "fmt:txt",
+        "label:ko",
+        "currency:comma",
+        "colorder:canonical",
+        "notices:2"
+      ],
+      "bytesLen": 1103,
+      "binary": false,
+      "truth": [
+        {
+          "doc_id": "GEN-0025",
+          "source_type": "수기",
+          "supplier": "새봄식품(예시)",
+          "raw_item_name": "냉동새우살900",
+          "normalized_item_name": "냉동 새우살",
+          "spec": "900g×10PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "126000",
+          "new_unit_price": "85337",
+          "effective_date": "2026-08-03",
+          "__source": {
+            "file": "synthetic",
+            "row": 25
+          }
+        },
+        {
+          "doc_id": "GEN-0026",
+          "source_type": "PDF",
+          "supplier": "바다원(예시)",
+          "raw_item_name": "나초칩454G",
+          "normalized_item_name": "나초칩",
+          "spec": "454g×12PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "48000",
+          "new_unit_price": "49965",
+          "effective_date": "2026-08-05",
+          "__source": {
+            "file": "synthetic",
+            "row": 26
+          }
+        },
+        {
+          "doc_id": "GEN-0027",
+          "source_type": "수기",
+          "supplier": "가온푸드(예시)",
+          "raw_item_name": "냉동감자튀김2K",
+          "normalized_item_name": "냉동 감자튀김",
+          "spec": "2kg×6PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "45000",
+          "new_unit_price": "46037",
+          "effective_date": "2026-08-07",
+          "__source": {
+            "file": "synthetic",
+            "row": 27
+          }
+        },
+        {
+          "doc_id": "GEN-0028",
+          "source_type": "IMAGE",
+          "supplier": "새봄식품(예시)",
+          "raw_item_name": "밀또띠아10인치",
+          "normalized_item_name": "밀 또띠아 10인치",
+          "spec": "12매×10PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "36000",
+          "new_unit_price": "36644",
+          "effective_date": "2026-08-03",
+          "__source": {
+            "file": "synthetic",
+            "row": 28
+          }
+        },
+        {
+          "doc_id": "GEN-0029",
+          "source_type": "PDF",
+          "supplier": "새봄식품(예시)",
+          "raw_item_name": "할라피뇨슬라이스",
+          "normalized_item_name": "할라피뇨 슬라이스",
+          "spec": "3kg×6CAN/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "72500",
+          "new_unit_price": "71959",
+          "effective_date": "2026-08-05",
+          "__source": {
+            "file": "synthetic",
+            "row": 29
+          }
+        }
+      ]
+    },
+    {
+      "id": "F00017",
+      "file": "F00017_eml.eml",
+      "format": "eml",
+      "tier": 1,
+      "difficulty": "noisy",
+      "levers": [
+        "fmt:eml",
+        "label:ko",
+        "currency:comma",
+        "colorder:canonical",
+        "notices:2",
+        "encoding:8bit"
+      ],
+      "bytesLen": 1004,
+      "binary": false,
+      "truth": [
+        {
+          "doc_id": "GEN-0030",
+          "source_type": "IMAGE",
+          "supplier": "푸른포장(예시)",
+          "raw_item_name": "사워크림1K",
+          "normalized_item_name": "사워크림",
+          "spec": "1kg×6PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "55000",
+          "new_unit_price": "55071",
+          "effective_date": "2026-08-03",
+          "__source": {
+            "file": "synthetic",
+            "row": 30
+          }
+        },
+        {
+          "doc_id": "GEN-0031",
+          "source_type": "XLSX",
+          "supplier": "한결유통(예시)",
+          "raw_item_name": "체다슬라이스",
+          "normalized_item_name": "체다 슬라이스",
+          "spec": "1kg×10PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "40500",
+          "new_unit_price": "26386",
+          "effective_date": "2026-08-01",
+          "__source": {
+            "file": "synthetic",
+            "row": 31
+          }
+        },
+        {
+          "doc_id": "GEN-0032",
+          "source_type": "PDF",
+          "supplier": "가온푸드(예시)",
+          "raw_item_name": "냉동블루베리1K",
+          "normalized_item_name": "냉동 블루베리",
+          "spec": "1kg×10PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "56000",
+          "new_unit_price": "37918",
+          "effective_date": "2026-08-01",
+          "__source": {
+            "file": "synthetic",
+            "row": 32
+          }
+        },
+        {
+          "doc_id": "GEN-0033",
+          "source_type": "PDF",
+          "supplier": "바다원(예시)",
+          "raw_item_name": "토마토살사S/O",
+          "normalized_item_name": "토마토 살사 소스",
+          "spec": "4kg/PK",
+          "unit": "PK",
+          "prev_unit_price": "32000",
+          "new_unit_price": "31660",
+          "effective_date": "2026-08-15",
+          "__source": {
+            "file": "synthetic",
+            "row": 33
+          }
+        }
+      ]
+    },
+    {
+      "id": "F00018",
+      "file": "F00018_html.html",
+      "format": "html",
+      "tier": 1,
+      "difficulty": "noisy",
+      "levers": [
+        "fmt:html",
+        "label:ko",
+        "currency:won",
+        "colorder:canonical",
+        "notices:1"
+      ],
+      "bytesLen": 1419,
+      "binary": false,
+      "truth": [
+        {
+          "doc_id": "GEN-0034",
+          "source_type": "XLSX",
+          "supplier": "가온푸드(예시)",
+          "raw_item_name": "스모크BBQ소스",
+          "normalized_item_name": "스모크 바비큐소스",
+          "spec": "2kg×6PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "59000",
+          "new_unit_price": "59217",
+          "effective_date": "2026-08-07",
+          "__source": {
+            "file": "synthetic",
+            "row": 34
+          }
+        },
+        {
+          "doc_id": "GEN-0035",
+          "source_type": "수기",
+          "supplier": "새봄식품(예시)",
+          "raw_item_name": "나초칩454G",
+          "normalized_item_name": "나초칩",
+          "spec": "454g×12PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "49500",
+          "new_unit_price": "49308",
+          "effective_date": "2026-08-01",
+          "__source": {
+            "file": "synthetic",
+            "row": 35
+          }
+        },
+        {
+          "doc_id": "GEN-0036",
+          "source_type": "수기",
+          "supplier": "푸른포장(예시)",
+          "raw_item_name": "아보카도30입",
+          "normalized_item_name": "아보카도",
+          "spec": "30EA/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "64000",
+          "new_unit_price": "67056",
+          "effective_date": "2026-08-01",
+          "__source": {
+            "file": "synthetic",
+            "row": 36
+          }
+        },
+        {
+          "doc_id": "GEN-0037",
+          "source_type": "PDF",
+          "supplier": "새봄식품(예시)",
+          "raw_item_name": "사워크림1K",
+          "normalized_item_name": "사워크림",
+          "spec": "1kg×6PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "52500",
+          "new_unit_price": "54646",
+          "effective_date": "2026-08-10",
+          "__source": {
+            "file": "synthetic",
+            "row": 37
+          }
+        }
+      ]
+    },
+    {
+      "id": "F00019",
+      "file": "F00019_md.md",
+      "format": "md",
+      "tier": 1,
+      "difficulty": "noisy",
+      "levers": [
+        "fmt:md",
+        "label:ko",
+        "currency:comma",
+        "colorder:canonical",
+        "notices:1"
+      ],
+      "bytesLen": 1005,
+      "binary": false,
+      "truth": [
+        {
+          "doc_id": "GEN-0038",
+          "source_type": "수기",
+          "supplier": "새봄식품(예시)",
+          "raw_item_name": "슈레드치즈2.5K",
+          "normalized_item_name": "슈레드 치즈",
+          "spec": "2.5kg×4PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "98000",
+          "new_unit_price": "98957",
+          "effective_date": "2026-08-12",
+          "__source": {
+            "file": "synthetic",
+            "row": 38
+          }
+        },
+        {
+          "doc_id": "GEN-0039",
+          "source_type": "PDF",
+          "supplier": "푸른포장(예시)",
+          "raw_item_name": "슈레드치즈2.5K",
+          "normalized_item_name": "슈레드 치즈",
+          "spec": "2.5kg×4PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "98000",
+          "new_unit_price": "103200",
+          "effective_date": "2026-08-12",
+          "__source": {
+            "file": "synthetic",
+            "row": 39
+          }
+        },
+        {
+          "doc_id": "GEN-0040",
+          "source_type": "수기",
+          "supplier": "새봄식품(예시)",
+          "raw_item_name": "토마토살사S/O",
+          "normalized_item_name": "토마토 살사 소스",
+          "spec": "4kg/PK",
+          "unit": "PK",
+          "prev_unit_price": "32500",
+          "new_unit_price": "33685",
+          "effective_date": "2026-08-07",
+          "__source": {
+            "file": "synthetic",
+            "row": 40
+          }
+        },
+        {
+          "doc_id": "GEN-0041",
+          "source_type": "XLSX",
+          "supplier": "한결유통(예시)",
+          "raw_item_name": "사워크림1K",
+          "normalized_item_name": "사워크림",
+          "spec": "1kg×6PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "52500",
+          "new_unit_price": "51573",
+          "effective_date": "2026-08-05",
+          "__source": {
+            "file": "synthetic",
+            "row": 41
+          }
+        },
+        {
+          "doc_id": "GEN-0042",
+          "source_type": "XLSX",
+          "supplier": "한결유통(예시)",
+          "raw_item_name": "슈레드치즈2.5K",
+          "normalized_item_name": "슈레드 치즈",
+          "spec": "2.5kg×4PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "98500",
+          "new_unit_price": "103857",
+          "effective_date": "2026-08-01",
+          "__source": {
+            "file": "synthetic",
+            "row": 42
+          }
+        }
+      ]
+    },
+    {
+      "id": "F00020",
+      "file": "F00020_pdf-text.pdf",
+      "format": "pdf-text",
+      "tier": 1,
+      "difficulty": "noisy",
+      "levers": [
+        "fmt:pdf-text",
+        "label:ko",
+        "currency:won",
+        "colorder:canonical",
+        "notices:2",
+        "font:embedded-kr"
+      ],
+      "bytesLen": 24658,
+      "binary": true,
+      "truth": [
+        {
+          "doc_id": "GEN-0043",
+          "source_type": "수기",
+          "supplier": "가온푸드(예시)",
+          "raw_item_name": "아보카도30입",
+          "normalized_item_name": "아보카도",
+          "spec": "30EA/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "66000",
+          "new_unit_price": "68349",
+          "effective_date": "2026-08-10",
+          "__source": {
+            "file": "synthetic",
+            "row": 43
+          }
+        },
+        {
+          "doc_id": "GEN-0044",
+          "source_type": "IMAGE",
+          "supplier": "바다원(예시)",
+          "raw_item_name": "체다슬라이스",
+          "normalized_item_name": "체다 슬라이스",
+          "spec": "1kg×10PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "41000",
+          "new_unit_price": "40857",
+          "effective_date": "2026-08-07",
+          "__source": {
+            "file": "synthetic",
+            "row": 44
+          }
+        },
+        {
+          "doc_id": "GEN-0045",
+          "source_type": "수기",
+          "supplier": "한결유통(예시)",
+          "raw_item_name": "라임30과",
+          "normalized_item_name": "라임",
+          "spec": "30EA/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "31500",
+          "new_unit_price": "43094",
+          "effective_date": "2026-08-12",
+          "__source": {
+            "file": "synthetic",
+            "row": 45
+          }
+        },
+        {
+          "doc_id": "GEN-0046",
+          "source_type": "수기",
+          "supplier": "푸른포장(예시)",
+          "raw_item_name": "허브염지닭정육",
+          "normalized_item_name": "허브 염지 닭정육",
+          "spec": "2kg×6PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "84500",
+          "new_unit_price": "85178",
+          "effective_date": "2026-08-05",
+          "__source": {
+            "file": "synthetic",
+            "row": 46
+          }
+        }
+      ]
+    },
+    {
+      "id": "F00021",
+      "file": "F00021_pdf-image.pdf",
+      "format": "pdf-image",
+      "tier": 2,
+      "difficulty": "noisy",
+      "levers": [
+        "fmt:pdf-image",
+        "scan:image-only",
+        "label:ko",
+        "currency:comma",
+        "colorder:canonical",
+        "notices:1",
+        "rotate:-0.8deg",
+        "lowdpi:0.90",
+        "shadow"
+      ],
+      "bytesLen": 72794,
+      "binary": true,
+      "truth": [
+        {
+          "doc_id": "GEN-0047",
+          "source_type": "PDF",
+          "supplier": "푸른포장(예시)",
+          "raw_item_name": "냉동새우살900",
+          "normalized_item_name": "냉동 새우살",
+          "spec": "900g×10PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "125000",
+          "new_unit_price": "123094",
+          "effective_date": "2026-08-05",
+          "__source": {
+            "file": "synthetic",
+            "row": 47
+          }
+        },
+        {
+          "doc_id": "GEN-0048",
+          "source_type": "IMAGE",
+          "supplier": "새봄식품(예시)",
+          "raw_item_name": "아보카도30입",
+          "normalized_item_name": "아보카도",
+          "spec": "30EA/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "65000",
+          "new_unit_price": "66149",
+          "effective_date": "2026-08-05",
+          "__source": {
+            "file": "synthetic",
+            "row": 48
+          }
+        }
+      ]
+    },
+    {
+      "id": "F00022",
+      "file": "F00022_png.png",
+      "format": "png",
+      "tier": 2,
+      "difficulty": "noisy",
+      "levers": [
+        "fmt:png",
+        "label:ko",
+        "currency:won",
+        "colorder:canonical",
+        "notices:2",
+        "rotate:1.0deg",
+        "lowdpi:0.94",
+        "font:embedded-kr"
+      ],
+      "bytesLen": 55088,
+      "binary": true,
+      "truth": [
+        {
+          "doc_id": "GEN-0049",
+          "source_type": "PDF",
+          "supplier": "새봄식품(예시)",
+          "raw_item_name": "블랙빈2.5K",
+          "normalized_item_name": "블랙빈",
+          "spec": "2.5kg×6CAN/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "61000",
+          "new_unit_price": "61644",
+          "effective_date": "2026-08-15",
+          "__source": {
+            "file": "synthetic",
+            "row": 49
+          }
+        }
+      ]
+    },
+    {
+      "id": "F00023",
+      "file": "F00023_jpg.jpg",
+      "format": "jpg",
+      "tier": 2,
+      "difficulty": "noisy",
+      "levers": [
+        "fmt:jpg",
+        "label:ko",
+        "currency:won",
+        "colorder:canonical",
+        "notices:2",
+        "rotate:1.2deg",
+        "lowdpi:0.96",
+        "jpeg:q68",
+        "font:embedded-kr"
+      ],
+      "bytesLen": 22919,
+      "binary": true,
+      "truth": [
+        {
+          "doc_id": "GEN-0050",
+          "source_type": "PDF",
+          "supplier": "한결유통(예시)",
+          "raw_item_name": "아보카도30입",
+          "normalized_item_name": "아보카도",
+          "spec": "30EA/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "64500",
+          "new_unit_price": "41054",
+          "effective_date": "2026-08-01",
+          "__source": {
+            "file": "synthetic",
+            "row": 50
+          }
+        },
+        {
+          "doc_id": "GEN-0051",
+          "source_type": "XLSX",
+          "supplier": "새봄식품(예시)",
+          "raw_item_name": "허브염지닭정육",
+          "normalized_item_name": "허브 염지 닭정육",
+          "spec": "2kg×6PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "84000",
+          "new_unit_price": "57357",
+          "effective_date": "2026-08-01",
+          "__source": {
+            "file": "synthetic",
+            "row": 51
+          }
+        },
+        {
+          "doc_id": "GEN-0052",
+          "source_type": "수기",
+          "supplier": "바다원(예시)",
+          "raw_item_name": "자스민쌀10K",
+          "normalized_item_name": "자스민쌀",
+          "spec": "10kg/PO",
+          "unit": "PO",
+          "prev_unit_price": "38000",
+          "new_unit_price": "25090",
+          "effective_date": "2026-08-01",
+          "__source": {
+            "file": "synthetic",
+            "row": 52
+          }
+        }
+      ]
+    },
+    {
+      "id": "F00024",
+      "file": "F00024_photo.jpg",
+      "format": "photo",
+      "tier": 2,
+      "difficulty": "noisy",
+      "levers": [
+        "fmt:photo",
+        "label:ko",
+        "currency:comma",
+        "colorder:canonical",
+        "notices:2",
+        "rotate:-3.0deg",
+        "skew:0.044",
+        "lowdpi:0.68",
+        "blur:0.61",
+        "jpeg:q59",
+        "shadow",
+        "font:embedded-kr"
+      ],
+      "bytesLen": 9912,
+      "binary": true,
+      "truth": [
+        {
+          "doc_id": "GEN-0053",
+          "source_type": "XLSX",
+          "supplier": "새봄식품(예시)",
+          "raw_item_name": "냉동감자튀김2K",
+          "normalized_item_name": "냉동 감자튀김",
+          "spec": "2kg×6PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "44500",
+          "new_unit_price": "47122",
+          "effective_date": "2026-08-15",
+          "__source": {
+            "file": "synthetic",
+            "row": 53
+          }
+        },
+        {
+          "doc_id": "GEN-0054",
+          "source_type": "수기",
+          "supplier": "새봄식품(예시)",
+          "raw_item_name": "자스민쌀10K",
+          "normalized_item_name": "자스민쌀",
+          "spec": "10kg/PO",
+          "unit": "PO",
+          "prev_unit_price": "39500",
+          "new_unit_price": "38723",
+          "effective_date": "2026-08-12",
+          "__source": {
+            "file": "synthetic",
+            "row": 54
+          }
+        },
+        {
+          "doc_id": "GEN-0055",
+          "source_type": "수기",
+          "supplier": "한결유통(예시)",
+          "raw_item_name": "허브염지닭정육",
+          "normalized_item_name": "허브 염지 닭정육",
+          "spec": "2kg×6PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "85000",
+          "new_unit_price": "84608",
+          "effective_date": "2026-08-15",
+          "__source": {
+            "file": "synthetic",
+            "row": 55
+          }
+        }
+      ]
+    },
+    {
+      "id": "F00025",
+      "file": "F00025_csv.csv",
+      "format": "csv",
+      "tier": 0,
+      "difficulty": "hard",
+      "levers": [
+        "header:mixed",
+        "delim:semicolon",
+        "currency:won",
+        "colorder:canonical"
+      ],
+      "bytesLen": 1162,
+      "binary": false,
+      "truth": [
+        {
+          "doc_id": "GEN-0001",
+          "source_type": "IMAGE",
+          "supplier": "푸른포장(예시)",
+          "raw_item_name": "라임30과",
+          "normalized_item_name": "라임",
+          "spec": "30EA/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "31500",
+          "new_unit_price": "22365",
+          "effective_date": "",
+          "__source": {
+            "file": "synthetic",
+            "row": 1
+          }
+        },
+        {
+          "doc_id": "GEN-0002",
+          "source_type": "IMAGE",
+          "supplier": "푸른포장(예시)",
+          "raw_item_name": "자스민쌀10K",
+          "normalized_item_name": "자스민쌀",
+          "spec": "",
+          "unit": "",
+          "prev_unit_price": "37500",
+          "new_unit_price": "",
+          "effective_date": "2026-08-07",
+          "__source": {
+            "file": "synthetic",
+            "row": 2
+          }
+        },
+        {
+          "doc_id": "GEN-0003",
+          "source_type": "XLSX",
+          "supplier": "바다원(예시)",
+          "raw_item_name": "사워크림1K",
+          "normalized_item_name": "사워크림",
+          "spec": "1kg×6PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "54500",
+          "new_unit_price": "54373",
+          "effective_date": "2026-08-01",
+          "__source": {
+            "file": "synthetic",
+            "row": 3
+          }
+        },
+        {
+          "doc_id": "GEN-0004",
+          "source_type": "XLSX",
+          "supplier": "바다원(예시)",
+          "raw_item_name": "사워크림1K",
+          "normalized_item_name": "사워크림",
+          "spec": "1kg×6PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "54500",
+          "new_unit_price": "54373",
+          "effective_date": "2026-08-01",
+          "__source": {
+            "file": "synthetic",
+            "row": 4
+          }
+        },
+        {
+          "doc_id": "GEN-0005",
+          "source_type": "PDF",
+          "supplier": "바다원(예시)",
+          "raw_item_name": "허브염지닭정육",
+          "normalized_item_name": "허브 염지 닭정육",
+          "spec": "2kg×6PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "84500",
+          "new_unit_price": "107452",
+          "effective_date": "2026-08-10",
+          "__source": {
+            "file": "synthetic",
+            "row": 5
+          }
+        },
+        {
+          "doc_id": "GEN-0006",
+          "source_type": "PDF",
+          "supplier": "바다원(예시)",
+          "raw_item_name": "허브염지닭정육 (재견적)",
+          "normalized_item_name": "허브 염지 닭정육",
+          "spec": "2kg×6PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "84500",
+          "new_unit_price": "108452",
+          "effective_date": "2026-08-10",
+          "__source": {
+            "file": "synthetic",
+            "row": 6
+          }
+        },
+        {
+          "doc_id": "GEN-0007",
+          "source_type": "IMAGE",
+          "supplier": "푸른포장(예시)",
+          "raw_item_name": "아보카도30입",
+          "normalized_item_name": "아보카도",
+          "spec": "기존 10kg / 변경 9kg",
+          "unit": "BOX",
+          "prev_unit_price": "65000",
+          "new_unit_price": "66938",
+          "effective_date": "2026-08-07",
+          "__source": {
+            "file": "synthetic",
+            "row": 7
+          }
+        },
+        {
+          "doc_id": "GEN-0008",
+          "source_type": "IMAGE",
+          "supplier": "가온푸드(예시)",
+          "raw_item_name": "아보카도30입",
+          "normalized_item_name": "아보카도",
+          "spec": "기존 5kg / 변경 4.5kg",
+          "unit": "BOX",
+          "prev_unit_price": "66500",
+          "new_unit_price": "67862",
+          "effective_date": "2026-08-03",
+          "__source": {
+            "file": "synthetic",
+            "row": 8
+          }
+        },
+        {
+          "doc_id": "GEN-0009",
+          "source_type": "수기",
+          "supplier": "한결유통(예시)",
+          "raw_item_name": "토마토살사S/O",
+          "normalized_item_name": "토마토 살사 소스",
+          "spec": "4kg/PK",
+          "unit": "EA/BOX",
+          "prev_unit_price": "31000",
+          "new_unit_price": "31336",
+          "effective_date": "2026-08-15",
+          "__source": {
+            "file": "synthetic",
+            "row": 9
+          }
+        }
+      ]
+    },
+    {
+      "id": "F00026",
+      "file": "F00026_xlsx.xlsx",
+      "format": "xlsx",
+      "tier": 0,
+      "difficulty": "hard",
+      "levers": [
+        "header:mixed",
+        "currency:won_suffix",
+        "colshuffle"
+      ],
+      "bytesLen": 10174,
+      "binary": true,
+      "truth": [
+        {
+          "doc_id": "GEN-0010",
+          "source_type": "IMAGE",
+          "supplier": "가온푸드(예시)",
+          "raw_item_name": "할라피뇨슬라이스",
+          "normalized_item_name": "할라피뇨 슬라이스",
+          "spec": "기존 1kg / 변경 4단",
+          "unit": "KG/단",
+          "prev_unit_price": "73500",
+          "new_unit_price": "77347",
+          "effective_date": "2026-08-07",
+          "__source": {
+            "file": "synthetic",
+            "row": 10
+          }
+        },
+        {
+          "doc_id": "GEN-0011",
+          "source_type": "IMAGE",
+          "supplier": "새봄식품(예시)",
+          "raw_item_name": "허브염지닭정육",
+          "normalized_item_name": "허브 염지 닭정육",
+          "spec": "2kg×6PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "84500",
+          "new_unit_price": "86724",
+          "effective_date": "2026-08-01",
+          "__source": {
+            "file": "synthetic",
+            "row": 11
+          }
+        },
+        {
+          "doc_id": "GEN-0012",
+          "source_type": "PDF",
+          "supplier": "바다원(예시)",
+          "raw_item_name": "올리브오일3L",
+          "normalized_item_name": "올리브 오일",
+          "spec": "3L×4EA/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "71000",
+          "new_unit_price": "44180",
+          "effective_date": "2026-08-12",
+          "__source": {
+            "file": "synthetic",
+            "row": 12
+          }
+        },
+        {
+          "doc_id": "GEN-0013",
+          "source_type": "IMAGE",
+          "supplier": "푸른포장(예시)",
+          "raw_item_name": "냉동감자튀김2K",
+          "normalized_item_name": "냉동 감자튀김",
+          "spec": "2kg×6PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "43500",
+          "new_unit_price": "42740",
+          "effective_date": "2026-08-15",
+          "__source": {
+            "file": "synthetic",
+            "row": 13
+          }
+        },
+        {
+          "doc_id": "GEN-0014",
+          "source_type": "수기",
+          "supplier": "바다원(예시)",
+          "raw_item_name": "슈레드치즈2.5K",
+          "normalized_item_name": "슈레드 치즈",
+          "spec": "2.5kg×4PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "96500",
+          "new_unit_price": "63364",
+          "effective_date": "2026-08-12",
+          "__source": {
+            "file": "synthetic",
+            "row": 14
+          }
+        },
+        {
+          "doc_id": "GEN-0015",
+          "source_type": "PDF",
+          "supplier": "새봄식품(예시)",
+          "raw_item_name": "자스민쌀10K",
+          "normalized_item_name": "자스민쌀",
+          "spec": "10kg/PO",
+          "unit": "PO",
+          "prev_unit_price": "38500",
+          "new_unit_price": "37768",
+          "effective_date": "2026-08-10",
+          "__source": {
+            "file": "synthetic",
+            "row": 15
+          }
+        },
+        {
+          "doc_id": "GEN-0016",
+          "source_type": "XLSX",
+          "supplier": "한결유통(예시)",
+          "raw_item_name": "올리브오일3L",
+          "normalized_item_name": "올리브 오일",
+          "spec": "3L×4EA/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "70500",
+          "new_unit_price": "69115",
+          "effective_date": "2026-08-18",
+          "__source": {
+            "file": "synthetic",
+            "row": 16
+          }
+        },
+        {
+          "doc_id": "GEN-0017",
+          "source_type": "PDF",
+          "supplier": "새봄식품(예시)",
+          "raw_item_name": "스모크BBQ소스",
+          "normalized_item_name": "스모크 바비큐소스",
+          "spec": "2kg×6PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "57000",
+          "new_unit_price": "56998",
+          "effective_date": "2026-08-05",
+          "__source": {
+            "file": "synthetic",
+            "row": 17
+          }
+        }
+      ]
+    },
+    {
+      "id": "F00027",
+      "file": "F00027_json.json",
+      "format": "json",
+      "tier": 0,
+      "difficulty": "hard",
+      "levers": [
+        "keys:en",
+        "currency:won",
+        "colorder:canonical",
+        "indent:2"
+      ],
+      "bytesLen": 1063,
+      "binary": false,
+      "truth": [
+        {
+          "doc_id": "GEN-0018",
+          "source_type": "IMAGE",
+          "supplier": "새봄식품(예시)",
+          "raw_item_name": "체다슬라이스",
+          "normalized_item_name": "체다 슬라이스",
+          "spec": "1kg×10PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "42500",
+          "new_unit_price": "57655",
+          "effective_date": "2026-08-01",
+          "__source": {
+            "file": "synthetic",
+            "row": 18
+          }
+        },
+        {
+          "doc_id": "GEN-0019",
+          "source_type": "수기",
+          "supplier": "새봄식품(예시)",
+          "raw_item_name": "할라피뇨슬라이스",
+          "normalized_item_name": "할라피뇨 슬라이스",
+          "spec": "3kg×6CAN/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "73500",
+          "new_unit_price": "76745",
+          "effective_date": "2026-08-10",
+          "__source": {
+            "file": "synthetic",
+            "row": 19
+          }
+        },
+        {
+          "doc_id": "GEN-0020",
+          "source_type": "XLSX",
+          "supplier": "새봄식품(예시)",
+          "raw_item_name": "토마토살사S/O",
+          "normalized_item_name": "토마토 살사 소스",
+          "spec": "4kg/PK",
+          "unit": "PK",
+          "prev_unit_price": "32500",
+          "new_unit_price": "45113",
+          "effective_date": "2026-08-18",
+          "__source": {
+            "file": "synthetic",
+            "row": 20
+          }
+        }
+      ]
+    },
+    {
+      "id": "F00028",
+      "file": "F00028_txt.txt",
+      "format": "txt",
+      "tier": 1,
+      "difficulty": "hard",
+      "levers": [
+        "fmt:txt",
+        "label:variant",
+        "currency:won",
+        "colorder:canonical",
+        "notices:3"
+      ],
+      "bytesLen": 844,
+      "binary": false,
+      "truth": [
+        {
+          "doc_id": "GEN-0021",
+          "source_type": "XLSX",
+          "supplier": "푸른포장(예시)",
+          "raw_item_name": "나초칩454G",
+          "normalized_item_name": "나초칩",
+          "spec": "454g×12PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "47000",
+          "new_unit_price": "32357",
+          "effective_date": "2026-08-12",
+          "__source": {
+            "file": "synthetic",
+            "row": 21
+          }
+        },
+        {
+          "doc_id": "GEN-0022",
+          "source_type": "수기",
+          "supplier": "새봄식품(예시)",
+          "raw_item_name": "밀또띠아10인치",
+          "normalized_item_name": "밀 또띠아 10인치",
+          "spec": "12매×10PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "35000",
+          "new_unit_price": "36167",
+          "effective_date": "2026-08-03",
+          "__source": {
+            "file": "synthetic",
+            "row": 22
+          }
+        },
+        {
+          "doc_id": "GEN-0023",
+          "source_type": "IMAGE",
+          "supplier": "바다원(예시)",
+          "raw_item_name": "체다슬라이스",
+          "normalized_item_name": "체다 슬라이스",
+          "spec": "1kg×10PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "41000",
+          "new_unit_price": "42404",
+          "effective_date": "2026-08-18",
+          "__source": {
+            "file": "synthetic",
+            "row": 23
+          }
+        }
+      ]
+    },
+    {
+      "id": "F00029",
+      "file": "F00029_eml.eml",
+      "format": "eml",
+      "tier": 1,
+      "difficulty": "hard",
+      "levers": [
+        "fmt:eml",
+        "label:variant",
+        "currency:won_suffix",
+        "colorder:canonical",
+        "notices:4",
+        "encoding:8bit"
+      ],
+      "bytesLen": 1371,
+      "binary": false,
+      "truth": [
+        {
+          "doc_id": "GEN-0024",
+          "source_type": "IMAGE",
+          "supplier": "가온푸드(예시)",
+          "raw_item_name": "허브염지닭정육",
+          "normalized_item_name": "허브 염지 닭정육",
+          "spec": "2kg×6PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "82500",
+          "new_unit_price": "86832",
+          "effective_date": "2026-08-07",
+          "__source": {
+            "file": "synthetic",
+            "row": 24
+          }
+        },
+        {
+          "doc_id": "GEN-0025",
+          "source_type": "XLSX",
+          "supplier": "바다원(예시)",
+          "raw_item_name": "로메인쉬레드",
+          "normalized_item_name": "로메인 쉬레드",
+          "spec": "1kg/PK",
+          "unit": "PK",
+          "prev_unit_price": "8500",
+          "new_unit_price": "11556",
+          "effective_date": "2026-08-18",
+          "__source": {
+            "file": "synthetic",
+            "row": 25
+          }
+        },
+        {
+          "doc_id": "GEN-0026",
+          "source_type": "XLSX",
+          "supplier": "가온푸드(예시)",
+          "raw_item_name": "냉동감자튀김2K",
+          "normalized_item_name": "냉동 감자튀김",
+          "spec": "2kg×6PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "44000",
+          "new_unit_price": "44636",
+          "effective_date": "2026-08-15",
+          "__source": {
+            "file": "synthetic",
+            "row": 26
+          }
+        },
+        {
+          "doc_id": "GEN-0027",
+          "source_type": "XLSX",
+          "supplier": "새봄식품(예시)",
+          "raw_item_name": "슈레드치즈2.5K",
+          "normalized_item_name": "슈레드 치즈",
+          "spec": "2.5kg×4PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "97000",
+          "new_unit_price": "102189",
+          "effective_date": "2026-08-01",
+          "__source": {
+            "file": "synthetic",
+            "row": 27
+          }
+        },
+        {
+          "doc_id": "GEN-0028",
+          "source_type": "수기",
+          "supplier": "가온푸드(예시)",
+          "raw_item_name": "냉동새우살900",
+          "normalized_item_name": "냉동 새우살",
+          "spec": "900g×10PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "124500",
+          "new_unit_price": "123786",
+          "effective_date": "2026-08-01",
+          "__source": {
+            "file": "synthetic",
+            "row": 28
+          }
+        }
+      ]
+    },
+    {
+      "id": "F00030",
+      "file": "F00030_html.html",
+      "format": "html",
+      "tier": 1,
+      "difficulty": "hard",
+      "levers": [
+        "fmt:html",
+        "label:variant",
+        "currency:comma",
+        "colorder:canonical",
+        "notices:2",
+        "multiline:br"
+      ],
+      "bytesLen": 1265,
+      "binary": false,
+      "truth": [
+        {
+          "doc_id": "GEN-0029",
+          "source_type": "XLSX",
+          "supplier": "가온푸드(예시)",
+          "raw_item_name": "자스민쌀10K",
+          "normalized_item_name": "자스민쌀",
+          "spec": "10kg/PO",
+          "unit": "PO",
+          "prev_unit_price": "36500",
+          "new_unit_price": "37265",
+          "effective_date": "2026-08-01",
+          "__source": {
+            "file": "synthetic",
+            "row": 29
+          }
+        },
+        {
+          "doc_id": "GEN-0030",
+          "source_type": "IMAGE",
+          "supplier": "푸른포장(예시)",
+          "raw_item_name": "냉동블루베리1K",
+          "normalized_item_name": "냉동 블루베리",
+          "spec": "1kg×10PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "55500",
+          "new_unit_price": "55667",
+          "effective_date": "2026-08-10",
+          "__source": {
+            "file": "synthetic",
+            "row": 30
+          }
+        },
+        {
+          "doc_id": "GEN-0031",
+          "source_type": "수기",
+          "supplier": "바다원(예시)",
+          "raw_item_name": "냉동블루베리1K",
+          "normalized_item_name": "냉동 블루베리",
+          "spec": "1kg×10PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "56500",
+          "new_unit_price": "56964",
+          "effective_date": "2026-08-01",
+          "__source": {
+            "file": "synthetic",
+            "row": 31
+          }
+        }
+      ]
+    },
+    {
+      "id": "F00031",
+      "file": "F00031_md.md",
+      "format": "md",
+      "tier": 1,
+      "difficulty": "hard",
+      "levers": [
+        "fmt:md",
+        "label:variant",
+        "currency:won_suffix",
+        "colorder:canonical",
+        "notices:2"
+      ],
+      "bytesLen": 676,
+      "binary": false,
+      "truth": [
+        {
+          "doc_id": "GEN-0032",
+          "source_type": "XLSX",
+          "supplier": "한결유통(예시)",
+          "raw_item_name": "슈레드치즈2.5K",
+          "normalized_item_name": "슈레드 치즈",
+          "spec": "2.5kg×4PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "97000",
+          "new_unit_price": "98470",
+          "effective_date": "2026-08-10",
+          "__source": {
+            "file": "synthetic",
+            "row": 32
+          }
+        },
+        {
+          "doc_id": "GEN-0033",
+          "source_type": "XLSX",
+          "supplier": "바다원(예시)",
+          "raw_item_name": "라임30과",
+          "normalized_item_name": "라임",
+          "spec": "30EA/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "31500",
+          "new_unit_price": "31285",
+          "effective_date": "2026-08-03",
+          "__source": {
+            "file": "synthetic",
+            "row": 33
+          }
+        }
+      ]
+    },
+    {
+      "id": "F00032",
+      "file": "F00032_pdf-text.pdf",
+      "format": "pdf-text",
+      "tier": 1,
+      "difficulty": "hard",
+      "levers": [
+        "fmt:pdf-text",
+        "label:variant",
+        "currency:comma",
+        "colshuffle",
+        "notices:4",
+        "font:embedded-kr"
+      ],
+      "bytesLen": 27867,
+      "binary": true,
+      "truth": [
+        {
+          "doc_id": "GEN-0034",
+          "source_type": "XLSX",
+          "supplier": "가온푸드(예시)",
+          "raw_item_name": "올리브오일3L",
+          "normalized_item_name": "올리브 오일",
+          "spec": "3L×4EA/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "72000",
+          "new_unit_price": "75332",
+          "effective_date": "2026-08-10",
+          "__source": {
+            "file": "synthetic",
+            "row": 34
+          }
+        },
+        {
+          "doc_id": "GEN-0035",
+          "source_type": "XLSX",
+          "supplier": "바다원(예시)",
+          "raw_item_name": "스모크BBQ소스",
+          "normalized_item_name": "스모크 바비큐소스",
+          "spec": "2kg×6PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "58500",
+          "new_unit_price": "57834",
+          "effective_date": "2026-08-01",
+          "__source": {
+            "file": "synthetic",
+            "row": 35
+          }
+        },
+        {
+          "doc_id": "GEN-0036",
+          "source_type": "XLSX",
+          "supplier": "새봄식품(예시)",
+          "raw_item_name": "냉동감자튀김2K",
+          "normalized_item_name": "냉동 감자튀김",
+          "spec": "2kg×6PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "45000",
+          "new_unit_price": "47139",
+          "effective_date": "2026-08-05",
+          "__source": {
+            "file": "synthetic",
+            "row": 36
+          }
+        }
+      ]
+    },
+    {
+      "id": "F00033",
+      "file": "F00033_pdf-image.pdf",
+      "format": "pdf-image",
+      "tier": 2,
+      "difficulty": "hard",
+      "levers": [
+        "fmt:pdf-image",
+        "scan:image-only",
+        "label:variant",
+        "currency:comma",
+        "colorder:canonical",
+        "notices:2",
+        "rotate:-2.4deg",
+        "lowdpi:0.66",
+        "shadow"
+      ],
+      "bytesLen": 64351,
+      "binary": true,
+      "truth": [
+        {
+          "doc_id": "GEN-0037",
+          "source_type": "IMAGE",
+          "supplier": "바다원(예시)",
+          "raw_item_name": "토마토살사S/O",
+          "normalized_item_name": "토마토 살사 소스",
+          "spec": "4kg/PK",
+          "unit": "PK",
+          "prev_unit_price": "32500",
+          "new_unit_price": "32573",
+          "effective_date": "2026-08-18",
+          "__source": {
+            "file": "synthetic",
+            "row": 37
+          }
+        },
+        {
+          "doc_id": "GEN-0038",
+          "source_type": "IMAGE",
+          "supplier": "한결유통(예시)",
+          "raw_item_name": "냉동새우살900",
+          "normalized_item_name": "냉동 새우살",
+          "spec": "900g×10PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "124000",
+          "new_unit_price": "127418",
+          "effective_date": "2026-08-15",
+          "__source": {
+            "file": "synthetic",
+            "row": 38
+          }
+        },
+        {
+          "doc_id": "GEN-0039",
+          "source_type": "IMAGE",
+          "supplier": "새봄식품(예시)",
+          "raw_item_name": "블랙빈2.5K",
+          "normalized_item_name": "블랙빈",
+          "spec": "2.5kg×6CAN/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "60000",
+          "new_unit_price": "62243",
+          "effective_date": "2026-08-01",
+          "__source": {
+            "file": "synthetic",
+            "row": 39
+          }
+        }
+      ]
+    },
+    {
+      "id": "F00034",
+      "file": "F00034_png.png",
+      "format": "png",
+      "tier": 2,
+      "difficulty": "hard",
+      "levers": [
+        "fmt:png",
+        "label:variant",
+        "currency:won",
+        "colorder:canonical",
+        "notices:4",
+        "rotate:-1.2deg",
+        "lowdpi:0.66",
+        "font:embedded-kr"
+      ],
+      "bytesLen": 52091,
+      "binary": true,
+      "truth": [
+        {
+          "doc_id": "GEN-0040",
+          "source_type": "XLSX",
+          "supplier": "푸른포장(예시)",
+          "raw_item_name": "블랙빈2.5K",
+          "normalized_item_name": "블랙빈",
+          "spec": "2.5kg×6CAN/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "59500",
+          "new_unit_price": "62426",
+          "effective_date": "2026-08-15",
+          "__source": {
+            "file": "synthetic",
+            "row": 40
+          }
+        },
+        {
+          "doc_id": "GEN-0041",
+          "source_type": "수기",
+          "supplier": "바다원(예시)",
+          "raw_item_name": "블랙빈2.5K",
+          "normalized_item_name": "블랙빈",
+          "spec": "2.5kg×6CAN/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "61000",
+          "new_unit_price": "79633",
+          "effective_date": "2026-08-10",
+          "__source": {
+            "file": "synthetic",
+            "row": 41
+          }
+        },
+        {
+          "doc_id": "GEN-0042",
+          "source_type": "XLSX",
+          "supplier": "푸른포장(예시)",
+          "raw_item_name": "올리브오일3L",
+          "normalized_item_name": "올리브 오일",
+          "spec": "3L×4EA/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "73500",
+          "new_unit_price": "76071",
+          "effective_date": "2026-08-15",
+          "__source": {
+            "file": "synthetic",
+            "row": 42
+          }
+        }
+      ]
+    },
+    {
+      "id": "F00035",
+      "file": "F00035_jpg.jpg",
+      "format": "jpg",
+      "tier": 2,
+      "difficulty": "hard",
+      "levers": [
+        "fmt:jpg",
+        "label:variant",
+        "currency:won_suffix",
+        "colshuffle",
+        "notices:2",
+        "rotate:1.9deg",
+        "lowdpi:0.78",
+        "jpeg:q51",
+        "font:embedded-kr"
+      ],
+      "bytesLen": 8582,
+      "binary": true,
+      "truth": [
+        {
+          "doc_id": "GEN-0043",
+          "source_type": "수기",
+          "supplier": "푸른포장(예시)",
+          "raw_item_name": "로메인쉬레드",
+          "normalized_item_name": "로메인 쉬레드",
+          "spec": "1kg/PK",
+          "unit": "PK",
+          "prev_unit_price": "8000",
+          "new_unit_price": "8215",
+          "effective_date": "2026-08-15",
+          "__source": {
+            "file": "synthetic",
+            "row": 43
+          }
+        }
+      ]
+    },
+    {
+      "id": "F00036",
+      "file": "F00036_photo.jpg",
+      "format": "photo",
+      "tier": 2,
+      "difficulty": "hard",
+      "levers": [
+        "fmt:photo",
+        "label:variant",
+        "currency:won_suffix",
+        "colshuffle",
+        "notices:2",
+        "rotate:9.1deg",
+        "skew:0.109",
+        "lowdpi:0.50",
+        "jpeg:q40",
+        "shadow",
+        "watermark:COPY",
+        "font:embedded-kr"
+      ],
+      "bytesLen": 5901,
+      "binary": true,
+      "truth": [
+        {
+          "doc_id": "GEN-0044",
+          "source_type": "수기",
+          "supplier": "가온푸드(예시)",
+          "raw_item_name": "체다슬라이스",
+          "normalized_item_name": "체다 슬라이스",
+          "spec": "1kg×10PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "43000",
+          "new_unit_price": "44977",
+          "effective_date": "2026-08-05",
+          "__source": {
+            "file": "synthetic",
+            "row": 44
+          }
+        },
+        {
+          "doc_id": "GEN-0045",
+          "source_type": "IMAGE",
+          "supplier": "푸른포장(예시)",
+          "raw_item_name": "냉동새우살900",
+          "normalized_item_name": "냉동 새우살",
+          "spec": "900g×10PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "124500",
+          "new_unit_price": "123512",
+          "effective_date": "2026-08-12",
+          "__source": {
+            "file": "synthetic",
+            "row": 45
+          }
+        },
+        {
+          "doc_id": "GEN-0046",
+          "source_type": "수기",
+          "supplier": "한결유통(예시)",
+          "raw_item_name": "허브염지닭정육",
+          "normalized_item_name": "허브 염지 닭정육",
+          "spec": "2kg×6PK/BOX",
+          "unit": "BOX",
+          "prev_unit_price": "83000",
+          "new_unit_price": "84771",
+          "effective_date": "2026-08-10",
+          "__source": {
+            "file": "synthetic",
+            "row": 46
+          }
+        }
+      ]
+    }
+  ]
+}

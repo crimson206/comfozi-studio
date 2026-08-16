@@ -1,0 +1,38 @@
+[
+  {
+    "doc_id": "GEN-0018",
+    "source_type": "IMAGE",
+    "supplier": "새봄식품(예시)",
+    "raw_item_name": "체다슬라이스",
+    "normalized_item_name": "체다 슬라이스",
+    "spec": "1kg×10PK/BOX",
+    "unit": "BOX",
+    "prev_unit_price": "₩42,500",
+    "new_unit_price": "₩57,655",
+    "effective_date": "2026-08-01"
+  },
+  {
+    "doc_id": "GEN-0019",
+    "source_type": "수기",
+    "supplier": "새봄식품(예시)",
+    "raw_item_name": "할라피뇨슬라이스",
+    "normalized_item_name": "할라피뇨 슬라이스",
+    "spec": "3kg×6CAN/BOX",
+    "unit": "BOX",
+    "prev_unit_price": "₩73,500",
+    "new_unit_price": "₩76,745",
+    "effective_date": "2026-08-10"
+  },
+  {
+    "doc_id": "GEN-0020",
+    "source_type": "XLSX",
+    "supplier": "새봄식품(예시)",
+    "raw_item_name": "토마토살사S/O",
+    "normalized_item_name": "토마토 살사 소스",
+    "spec": "4kg/PK",
+    "unit": "PK",
+    "prev_unit_price": "₩32,500",
+    "new_unit_price": "₩45,113",
+    "effective_date": "2026-08-18"
+  }
+]

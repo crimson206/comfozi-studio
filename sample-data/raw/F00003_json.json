@@ -1,0 +1,110 @@
+[
+  {
+    "doc_id": "GEN-0010",
+    "source_type": "IMAGE",
+    "supplier": "바다원(예시)",
+    "raw_item_name": "블랙빈2.5K",
+    "normalized_item_name": "블랙빈",
+    "spec": "기존 1kg / 변경 4단",
+    "unit": "KG/단",
+    "prev_unit_price": "60000",
+    "new_unit_price": "62894",
+    "effective_date": "2026-08-15"
+  },
+  {
+    "doc_id": "GEN-0011",
+    "source_type": "PDF",
+    "supplier": "새봄식품(예시)",
+    "raw_item_name": "냉동감자튀김2K",
+    "normalized_item_name": "냉동 감자튀김",
+    "spec": "2kg×6PK/BOX",
+    "unit": "BOX",
+    "prev_unit_price": "43500",
+    "new_unit_price": "43283",
+    "effective_date": "2026-08-07"
+  },
+  {
+    "doc_id": "GEN-0012",
+    "source_type": "PDF",
+    "supplier": "가온푸드(예시)",
+    "raw_item_name": "밀또띠아10인치",
+    "normalized_item_name": "밀 또띠아 10인치",
+    "spec": "12매×10PK/BOX",
+    "unit": "BOX",
+    "prev_unit_price": "37000",
+    "new_unit_price": "49804",
+    "effective_date": "2026-08-18"
+  },
+  {
+    "doc_id": "GEN-0013",
+    "source_type": "수기",
+    "supplier": "한결유통(예시)",
+    "raw_item_name": "라임30과",
+    "normalized_item_name": "라임",
+    "spec": "30EA/BOX",
+    "unit": "BOX",
+    "prev_unit_price": "30000",
+    "new_unit_price": "30371",
+    "effective_date": "2026-08-18"
+  },
+  {
+    "doc_id": "GEN-0014",
+    "source_type": "PDF",
+    "supplier": "바다원(예시)",
+    "raw_item_name": "나초칩454G",
+    "normalized_item_name": "나초칩",
+    "spec": "454g×12PK/BOX",
+    "unit": "BOX",
+    "prev_unit_price": "47500",
+    "new_unit_price": "47327",
+    "effective_date": "2026-08-12"
+  },
+  {
+    "doc_id": "GEN-0015",
+    "source_type": "XLSX",
+    "supplier": "가온푸드(예시)",
+    "raw_item_name": "라임30과",
+    "normalized_item_name": "라임",
+    "spec": "30EA/BOX",
+    "unit": "BOX",
+    "prev_unit_price": "30500",
+    "new_unit_price": "30591",
+    "effective_date": "2026-08-05"
+  },
+  {
+    "doc_id": "GEN-0016",
+    "source_type": "수기",
+    "supplier": "새봄식품(예시)",
+    "raw_item_name": "아보카도30입",
+    "normalized_item_name": "아보카도",
+    "spec": "30EA/BOX",
+    "unit": "BOX",
+    "prev_unit_price": "66500",
+    "new_unit_price": "68576",
+    "effective_date": "2026-08-03"
+  },
+  {
+    "doc_id": "GEN-0017",
+    "source_type": "IMAGE",
+    "supplier": "가온푸드(예시)",
+    "raw_item_name": "할라피뇨슬라이스",
+    "normalized_item_name": "할라피뇨 슬라이스",
+    "spec": "3kg×6CAN/BOX",
+    "unit": "BOX",
+    "prev_unit_price": "73000",
+    "new_unit_price": "94137",
+    "effective_date": "2026-08-07"
+  },
+  {
+    "doc_id": "GEN-0018",
+    "source_type": "PDF",
+    "supplier": "바다원(예시)",
+    "raw_item_name": "올리브오일3L",
+    "normalized_item_name": "올리브 오일",
+    "spec": "3L×4EA/BOX",
+    "unit": "BOX",
+    "prev_unit_price": "71500",
+    "new_unit_price": "91104",
+    "effective_date": "2026-08-18"
+  }
+]

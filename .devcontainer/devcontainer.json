@@ -1,0 +1,18 @@
+{
+  "name": "comfozi-studio",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:20",
+  "features": {
+    "ghcr.io/devcontainers/features/python:1": { "version": "3.11" }
+  },
+  "onCreateCommand": "sudo apt-get update -y && sudo apt-get install -y fonts-nanum fonts-noto-cjk",
+  "postCreateCommand": "bash scripts/setup.sh",
+  "forwardPorts": [5173],
+  "portsAttributes": {
+    "5173": { "label": "comfozi 검수 인박스", "onAutoForward": "openPreview" }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": ["dbaeumer.vscode-eslint", "ms-python.python"]
+    }
+  }
+}

@@ -1,0 +1,18 @@
+From: sales@vendor.example
+To: purchasing@comfozi.example
+Subject: [단가변경] 매입 단가 변경 내역서
+Date: 2026-08-03
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+
+결제조건: 월말 마감 익월 25일 지급.
+문의: 구매팀 (내선 0000)
+
+문서ID | 원본유형 | 공급사 | 원문 품목명 | 정규화 품목명 | 규격 | 단위 | 기존단가 | 변경단가 | 적용일
+--------------------
+GEN-0030 | IMAGE | 푸른포장(예시) | 사워크림1K | 사워크림 | 1kg×6PK/BOX | BOX | 55,000 | 55,071 | 2026-08-03
+GEN-0031 | XLSX | 한결유통(예시) | 체다슬라이스 | 체다 슬라이스 | 1kg×10PK/BOX | BOX | 40,500 | 26,386 | 2026-08-01
+GEN-0032 | PDF | 가온푸드(예시) | 냉동블루베리1K | 냉동 블루베리 | 1kg×10PK/BOX | BOX | 56,000 | 37,918 | 2026-08-01
+GEN-0033 | PDF | 바다원(예시) | 토마토살사S/O | 토마토 살사 소스 | 4kg/PK | PK | 32,000 | 31,660 | 2026-08-15
+

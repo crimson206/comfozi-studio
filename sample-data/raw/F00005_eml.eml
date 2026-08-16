@@ -1,0 +1,16 @@
+From: noreply@invoice.example
+To: purchasing@comfozi.example
+Subject: [단가변경] 매입 단가 변경 내역서
+Date: 2026-08-07
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+
+문서ID | 원본유형 | 공급사 | 원문 품목명 | 정규화 품목명 | 규격 | 단위 | 기존단가 | 변경단가 | 적용일
+--------------------
+GEN-0020 | XLSX | 가온푸드(예시) | 자스민쌀10K | 자스민쌀 | 10kg/PO | PO | 37500 | 39439 | 2026-08-07
+GEN-0021 | PDF | 새봄식품(예시) | 냉동블루베리1K | 냉동 블루베리 | 1kg×10PK/BOX | BOX | 54500 | 54576 | 2026-08-03
+GEN-0022 | IMAGE | 한결유통(예시) | 밀또띠아10인치 | 밀 또띠아 10인치 | 12매×10PK/BOX | BOX | 37000 | 36714 | 2026-08-01
+GEN-0023 | IMAGE | 새봄식품(예시) | 토마토살사S/O | 토마토 살사 소스 | 4kg/PK | PK | 30500 | 39429 | 2026-08-03
+GEN-0024 | 수기 | 바다원(예시) | 슈레드치즈2.5K | 슈레드 치즈 | 2.5kg×4PK/BOX | BOX | 98000 | 102177 | 2026-08-10
+
