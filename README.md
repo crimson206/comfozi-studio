@@ -89,11 +89,10 @@ AI 파싱은 "서버 없이, 본인 Claude 구독으로" 돌리기 위해 우리
 | **snapshot** | 스냅샷(`@ist/beta`)으로 위 툴체인을 **한 번에 설치**. |
 
 > 그래서 **서버 0 · 본인 Claude 구독 · 전부 로컬**. 결정적 파서로 안 되는 이미지/스캔만 이 세션 풀로 넘어갑니다.
-> (설치가 조금 걸리는 과정이라 기본 셋업/프리빌드엔 넣지 않았습니다 — 아래처럼 직접 준비하세요.)
+>
+> **왜 세션 풀?** 문서마다 Claude를 콜드스타트하면 대량(수백 건)에서 느리고 낭비됩니다 → isesh가 **warm 세션 K개를 재사용**하며 `[DOC-EXTRACT]` 요청을 백프레셔로 흘려보냅니다(동시성 = `--concurrency K`, 기본 2). **comfozi 실제 제품이 쓰는 세션 인프라 그대로**라, AI 파싱을 돌려보는 것 자체가 우리 도구 실물 체험이 됩니다.
 
-> ⚠️ **기본 `make setup` 엔 아래 AI 도구가 포함되지 않습니다.** deterministic 이 기본값이며, AI 파싱을 쓰려면 아래를 직접 준비하세요.
-
-> ⚠️ **AI 모드엔 `isesh`(@ist 세션 러너)가 필요합니다.** 미설치면 `parse --mode ai`가 세션을 못 띄워 **모든 문서가 `failed`** 로 나옵니다(=Claude Code만 깔아선 부족). @ist 툴체인 설치엔 레지스트리 접근 권한이 필요(오너/팀 환경). 일반 심사자 기본 경로는 여전히 deterministic 입니다.
+> ⚠️ **AI 모드엔 `isesh`(@ist 세션 러너)가 필요** — 기본 `make setup`엔 미포함이고 deterministic이 기본값입니다. **미설치/미로그인이면 `parse --mode ai`가 세션을 못 띄워 모든 문서가 `failed`** 로 나옵니다(Claude Code만으론 부족). @ist 툴체인 설치엔 레지스트리 접근 권한이 필요합니다(오너/팀 환경).
 
 **AI 모드 준비 (1회):**
 ```bash
@@ -108,12 +107,16 @@ cd ../..
 claude login                             # OAuth  (또는 ANTHROPIC_API_KEY / Codespaces Secret)
 ```
 
+**설치 확인:** `command -v isesh && command -v claude` (둘 다 나와야 함), `claude` 로그인 여부 확인.
+
 **실행:**
 ```bash
 make parse MODE=ai        # 모든 문서를 AI(vision)로
 make parse MODE=auto      # 텍스트=결정적, 이미지/저신뢰만 AI 폴백
-# OCR 초벌 얹기: node vendor/parse-fleet/dist/cli.js parse work/raw --mode ai --ai-input vision+ocr --out work/parsed.json
+# 동시성 K·OCR 등 세부 옵션은 CLI 직접 호출:
+node vendor/parse-fleet/dist/cli.js parse work/raw --mode ai --concurrency 4 --ai-input vision+ocr --out work/parsed.json --pretty
 ```
+**✅ 확인:** `done — rows=… ai=N failed=0` (ai>0, failed=0). `failed=전체`면 아래 문제해결 참고.
 
 **설정 파일 (커스터마이즈):**
 - `vendor/parse-fleet/profiles/comfozi-doc-parser.md` — AI 파서 세션 프로필(모델=Claude vision, 도구 Read/Glob/Write, `[DOC-EXTRACT]` 추출 계약)
@@ -143,4 +146,5 @@ scripts/ , Makefile        파이프라인 스텝
 ## 문제 해결
 - `make` 가 "command not found @comfozi/…": `make setup` 을 먼저(또는 postCreate 완료 대기).
 - 파싱에서 이미지가 다 실패 후보: 정상(기본 deterministic). 이미지 파싱은 `MODE=ai`.
+- **`make parse MODE=ai` 가 `failed=전체`(ai=0):** isesh 세션을 못 띄운 것. 체크 — ① `command -v isesh`(없으면 `snapshot install @ist/beta`), ② `claude` 로그인, ③ `cd vendor/parse-fleet && skit install`(프로필). 위 "AI 파싱" 참고.
 - 인박스 '파싱 결과'가 비어있음: `make parse` 후 `make inbox` 순서인지 확인(`work/parsed.json` → app/public 복사됨).
