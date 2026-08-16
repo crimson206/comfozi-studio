@@ -231,9 +231,10 @@ function iseshTransport(workspace, profile) {
     },
     async collect(outPath, timeoutMs) {
       const pollMs = 200;
+      const noLimit = timeoutMs <= 0;
       const deadline = Date.now() + timeoutMs;
       let lastSize = -1;
-      while (Date.now() < deadline) {
+      while (noLimit || Date.now() < deadline) {
         let size = -1;
         try {
           size = (await fs.stat(outPath)).size;
@@ -278,9 +279,9 @@ var SessionPool = class {
   constructor(opts) {
     this.opts = opts;
     this.transport = opts.transport ?? iseshTransport(opts.workspace ?? process.cwd(), opts.profile ?? DEFAULT_PARSER_PROFILE);
-    this.timeoutMs = opts.timeoutMs ?? 18e4;
+    this.timeoutMs = opts.timeoutMs ?? 0;
     this.readiness = opts.readiness ?? opts.transport === void 0;
-    this.readinessTimeoutMs = opts.readinessTimeoutMs ?? 12e4;
+    this.readinessTimeoutMs = opts.readinessTimeoutMs ?? 0;
     this.aiInput = opts.aiInput ?? "vision";
     this.backend = opts.backend ?? "claude";
     this.onSession = opts.onSession;
@@ -328,6 +329,7 @@ var SessionPool = class {
     const names = Array.from({ length: this.opts.size }, (_, i) => `${this.opts.prefix}-parser-${i + 1}`);
     await Promise.all(names.map((n) => this.transport.start(n)));
     this.log(`pool: started ${names.length} session(s), awaiting readiness\u2026`);
+    this.log(`pool: AI \uC138\uC158\uC774 \uB05D\uB0BC \uB54C\uAE4C\uC9C0 \uB300\uAE30\uD569\uB2C8\uB2E4(\uD0C0\uC784\uC544\uC6C3 \uC5C6\uC74C). \uC9C4\uD589 \uD655\uC778 \u2192 \uB2E4\uB978 \uD130\uBBF8\uB110\uC5D0\uC11C 'isesh list' (\uC0C1\uD0DC) \xB7 'isesh attach <\uC138\uC158\uBA85>' (\uC138\uC158 \uD654\uBA74 \uC9C1\uC811 \uBCF4\uAE30).`);
     if (this.readiness) {
       await Promise.all(names.map((n) => this.awaitReady(n)));
     } else if (this.opts.primer) {
@@ -348,9 +350,10 @@ var SessionPool = class {
   async awaitReady(session) {
     const readyPath = path.join(this.tmpDir, `ready-${session}.txt`);
     const probe = `[FLEET-READY] \uC900\uBE44\uB418\uBA74 \uC989\uC2DC Write \uB3C4\uAD6C\uB85C \uD30C\uC77C "${readyPath}" \uC5D0 \uC815\uD655\uD788 READY \uD55C \uB2E8\uC5B4\uB9CC \uC368\uB77C. \uC774 \uD30C\uC77C \uC791\uC131 \uC678 \uB2E4\uB978 \uC751\uB2F5/\uD30C\uC77C \uC0DD\uC131\uC740 \uD558\uC9C0 \uB9C8\uB77C.`;
+    const noLimit = this.readinessTimeoutMs <= 0;
     const deadline = Date.now() + this.readinessTimeoutMs;
     let lastSend = 0;
-    while (Date.now() < deadline) {
+    while (noLimit || Date.now() < deadline) {
       if (Date.now() - lastSend > 12e3) {
         await this.transport.send(session, probe).catch(() => {
         });
@@ -948,4 +951,4 @@ export {
   runPipeline,
   parseFleet
 };
-//# sourceMappingURL=chunk-FGZ7KRXI.js.map
+//# sourceMappingURL=chunk-ZZ6XISC3.js.map

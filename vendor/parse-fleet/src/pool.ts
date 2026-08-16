@@ -201,9 +201,10 @@ export function iseshTransport(workspace: string, profile?: string): PoolTranspo
     },
     async collect(outPath, timeoutMs) {
       const pollMs = 200;
+      const noLimit = timeoutMs <= 0;
       const deadline = Date.now() + timeoutMs;
       let lastSize = -1;
-      while (Date.now() < deadline) {
+      while (noLimit || Date.now() < deadline) {
         let size = -1;
         try {
           size = (await fs.stat(outPath)).size;
@@ -292,11 +293,11 @@ export class SessionPool {
   constructor(private readonly opts: SessionPoolOptions) {
     this.transport =
       opts.transport ?? iseshTransport(opts.workspace ?? process.cwd(), opts.profile ?? DEFAULT_PARSER_PROFILE);
-    this.timeoutMs = opts.timeoutMs ?? 180000;
+    this.timeoutMs = opts.timeoutMs ?? 0; // 0 = 무한 대기 (AI 가 끝낼 때까지)
     // Readiness handshake defaults ON for the real isesh transport, OFF when a
     // transport is injected (tests/offline) — those have no real agent to init.
     this.readiness = opts.readiness ?? opts.transport === undefined;
-    this.readinessTimeoutMs = opts.readinessTimeoutMs ?? 120000;
+    this.readinessTimeoutMs = opts.readinessTimeoutMs ?? 0; // 0 = 무한
     this.aiInput = opts.aiInput ?? 'vision';
     this.backend = opts.backend ?? 'claude';
     this.onSession = opts.onSession;
@@ -332,6 +333,7 @@ export class SessionPool {
 
     await Promise.all(names.map((n) => this.transport.start(n)));
     this.log(`pool: started ${names.length} session(s), awaiting readiness…`);
+    this.log(`pool: AI 세션이 끝낼 때까지 대기합니다(타임아웃 없음). 진행 확인 → 다른 터미널에서 'isesh list' (상태) · 'isesh attach <세션명>' (세션 화면 직접 보기).`);
 
     if (this.readiness) {
       await Promise.all(names.map((n) => this.awaitReady(n)));
@@ -357,9 +359,10 @@ export class SessionPool {
     const probe =
       `[FLEET-READY] 준비되면 즉시 Write 도구로 파일 "${readyPath}" 에 정확히 READY 한 단어만 써라. ` +
       `이 파일 작성 외 다른 응답/파일 생성은 하지 마라.`;
+    const noLimit = this.readinessTimeoutMs <= 0;
     const deadline = Date.now() + this.readinessTimeoutMs;
     let lastSend = 0;
-    while (Date.now() < deadline) {
+    while (noLimit || Date.now() < deadline) {
       if (Date.now() - lastSend > 12000) {
         await this.transport.send(session, probe).catch(() => {}); // busy/not-ready → retry next loop
         lastSend = Date.now();
