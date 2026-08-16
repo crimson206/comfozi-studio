@@ -45,14 +45,35 @@ make generate SEED=1 COUNT=48
 **본인 문서로 하려면:** 이 단계를 건너뛰고 `work/raw/` 에 본인 증빙 파일을 넣으세요.
 
 ### ② 파싱 — `make parse`
-결정적 파서로 `work/raw` → `work/parsed.json` (행 + provenance + detector 결과).
+`work/raw` → `work/parsed.json` (행 + provenance + detector). **모드 2가지:**
+
+**(a) deterministic (기본 — 설치·로그인 0):**
 ```bash
-make parse               # mode=deterministic (오프라인, 크레덴셜 불필요)
+make parse               # csv·xlsx·json·txt·eml·html·md·pdf-text 파싱 (이미지는 "파싱 실패 후보")
 ```
-**✅ 확인:** 마지막 줄 `comfozi-parse-fleet: done — rows=… failed=0`, `work/parsed.json` 생성.
-> **진행 실시간(streaming):** 다른 터미널에서 `tail -f work/parsed.jsonl` — 파싱되는 대로 행이 쌓입니다(특히 느린 AI 모드에서 유용, 이상하면 바로 중단).
-> **세션 수:** `make parse SESSIONS=8` (동시 세션 ↑ = 빠름, 기본 4).
-> 이미지/스캔(png·jpg·pdf-image·photo)까지 AI로 파싱하려면 `make parse MODE=ai` — **본인 Claude 로그인 필요**(아래 "AI 파싱" 참고). 기본 deterministic 에서는 이미지가 "파싱 실패 후보"로 정직하게 표시됩니다.
+
+**(b) AI 파싱 (이미지·스캔까지 + 빠른 2D 병렬) — ⚠ 먼저 아래 설치·로그인 1회:**
+```bash
+# 1) tmux + Claude Code (직접 설치)
+sudo apt-get install -y tmux                  # mac: brew install tmux
+npm i -g @anthropic-ai/claude-code
+claude login                                  # Claude 로그인
+# 2) isesh 툴체인(@ist) — snapshot 으로
+npm i -g @microwiseai/snapshot
+ist auth login                                # IST 인증 (@ist 레지스트리 접근)
+snapshot install @ist/beta                    # isesh · imessenger · skit
+# 3) parse-fleet 파서 프로필(배치 계약)
+cd vendor/parse-fleet && skit install && cd ../..
+```
+설치 후 실행 (**X세션 × Y파일 = 2D 병렬**):
+```bash
+make parse MODE=auto SESSIONS=4 BATCH=8        # 권장: 이미지만 AI, 4세션 × 8파일/요청
+make parse MODE=ai   SESSIONS=8 BATCH=8        # 전부 AI
+tail -f work/parsed.jsonl                      # (다른 터미널) 실시간 진행 — 이상하면 바로 중단
+```
+> **왜 빠른가:** 한 세션에 여러 파일 경로를 한 번에(이미지 합치기 X, 각 원본 풀해상도) → **장당 22.4s→5.8s (3.8배, 실측)** + 세션 수(X)로 추가 병렬. 동작 원리·설정파일은 아래 **"AI 파싱 세부"**.
+
+**✅ 확인:** `comfozi-parse-fleet: done — rows=… failed=0`, `work/parsed.json`(+ `work/parsed.jsonl` 스트림). **AI인데 `failed=전체`면** 설치 확인: `command -v tmux isesh claude` + `claude login` 여부.
 
 ### ③ GBM 훈련 — `make train`
 LightGBM 훈련 → 브라우저 추론용 `model.json` → 검수 앱에 **자동 배선**.
@@ -77,8 +98,10 @@ make inbox
 
 ---
 
-## AI 파싱 (선택 — 이미지/스캔까지)
-기본 파이프라인은 **로그인 없이** 돕니다(`MODE=deterministic`). 이미지·스캔(png·jpg·pdf-image·photo)까지 AI로 파싱하는 `MODE=ai`/`MODE=auto` 만 Claude가 필요합니다. parse-fleet이 **로컬 isesh 세션**(Claude vision)으로 파싱 — 본인 Claude 구독 사용, 전부 로컬.
+## AI 파싱 세부 (동작 원리 · 설정)
+> 설치·실행은 위 **스텝 ②(b)** 에 순서대로 있습니다. 이 절은 원리/커스터마이즈 참고용.
+
+이미지·스캔(png·jpg·pdf-image·photo)까지 AI로 파싱하는 `MODE=ai`/`MODE=auto`는 parse-fleet이 **로컬 isesh 세션**(Claude vision)으로 처리 — 본인 Claude 구독, 전부 로컬.
 
 ### 어떻게 동작하나 — comfozi가 쓰는 세션 도구(@ist)
 AI 파싱은 "서버 없이, 본인 Claude 구독으로" 돌리기 위해 우리 세션 툴체인을 씁니다. parse-fleet이 문서 배치를 받아 **여러 개의 Claude vision 세션에 분산**시켜 파싱합니다:
@@ -94,33 +117,14 @@ AI 파싱은 "서버 없이, 본인 Claude 구독으로" 돌리기 위해 우리
 >
 > **왜 세션 풀?** 문서마다 Claude를 콜드스타트하면 대량(수백 건)에서 느리고 낭비됩니다 → isesh가 **warm 세션 K개를 재사용**하며 `[DOC-EXTRACT]` 요청을 백프레셔로 흘려보냅니다(동시성 = `--concurrency K`, 기본 2). **comfozi 실제 제품이 쓰는 세션 인프라 그대로**라, AI 파싱을 돌려보는 것 자체가 우리 도구 실물 체험이 됩니다.
 
-> ⚠️ **AI/auto 모드에만** 필요: **tmux + Claude Code(직접 설치) + isesh(`snapshot install @ist/beta`) + IST 인증(`ist auth login`)**. 기본 `make setup`엔 미포함, deterministic이 기본값. 하나라도 없으면 `--mode ai`가 세션을 못 띄워 **모든 문서 `failed`**. `@ist/beta`는 **IST 계정 필요 → 오너/팀 전용**, 외부 심사자는 deterministic.
+> ⚠️ **설치·실행 명령은 위 스텝 ②(b) 참고** (거기 순서대로 있습니다). `@ist/beta`는 **IST 계정 필요 → 오너/팀 전용**(외부 심사자는 deterministic 경로).
 
-**AI 모드 준비 (1회):**
+**세부 옵션 (CLI 직접):**
 ```bash
-# ── tmux + Claude Code 는 직접 설치 ──
-sudo apt-get install -y tmux              # Ubuntu/Debian  (mac: brew install tmux)
-npm i -g @anthropic-ai/claude-code        # Claude Code CLI
-claude login                              # Claude 로그인
-# ── isesh 툴체인은 snapshot 으로 ──
-npm i -g @microwiseai/snapshot            # snapshot CLI (npm)
-ist auth login                            # IST 인증 (@ist 레지스트리 접근)
-snapshot install @ist/beta                # isesh · imessenger · skit
-# ── parse-fleet 파서 프로필(배치 계약) ──
-cd vendor/parse-fleet && skit install && cd ../..
+node vendor/parse-fleet/dist/cli.js parse work/raw --mode auto --sessions 8 --batch 8 \
+  --ai-input vision+ocr --stream work/parsed.jsonl --out work/parsed.json --pretty
 ```
-
-**설치 확인:** `command -v tmux isesh claude` (셋 다 나와야 함) + `claude` 로그인 상태.
-
-**실행 (2D 병렬 — X세션 × Y파일/요청):**
-```bash
-make parse MODE=auto SESSIONS=4 BATCH=8   # 권장: 4세션 × 8파일/요청 (auto=이미지만 AI)
-make parse MODE=ai   SESSIONS=8 BATCH=8   # 전부 AI
-tail -f work/parsed.jsonl                 # (다른 터미널) 진행 실시간
-```
-> **왜 2D 배치?** 한 세션에 **여러 파일 경로를 한 번에**(이미지 합치기 X, 각 원본 풀해상도) 주면 세션 턴 오버헤드가 amortize → **장당 22.4s→5.8s (3.8배, 실측)**. 거기에 **세션 수(X)** 로 추가 병렬. `--ai-input vision+ocr`로 OCR 교차검증.
-> 세부는 CLI 직접: `node vendor/parse-fleet/dist/cli.js parse work/raw --mode ai --sessions 8 --batch 8 --stream work/parsed.jsonl --out work/parsed.json`
-**✅ 확인:** `done — rows=… ai=N failed=0` (ai>0, failed=0). `failed=전체`면 아래 문제해결 참고.
+`--sessions`=동시 세션 X · `--batch`=요청당 파일 Y · `--ai-input vision+ocr`=OCR 초벌 교차검증 · `--stream`=실시간 append.
 
 **설정 파일 (커스터마이즈):**
 - `vendor/parse-fleet/profiles/comfozi-doc-parser.md` — AI 파서 세션 프로필(모델=Claude vision, 도구 Read/Glob/Write, `[DOC-EXTRACT]` 추출 계약)
