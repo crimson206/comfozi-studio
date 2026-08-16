@@ -89,7 +89,11 @@ export async function parseFleet(docs: readonly DocRef[], opts: FleetOptions = {
   const limit = opts.concurrency ?? 2;
 
   try {
-    const settled = await mapLimit(docs, limit, (doc) => routeOne(doc, opts, deterministic, ai));
+    const settled = await mapLimit(docs, limit, async (doc, index) => {
+      const r = await routeOne(doc, opts, deterministic, ai);
+      try { opts.onResult?.(r.output, doc, index); } catch { /* streaming is best-effort */ }
+      return r;
+    });
 
     const routing: RouteDecision[] = [];
     const laneRows: ParsedRow[][] = [];

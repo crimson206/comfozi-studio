@@ -49,7 +49,9 @@ make generate SEED=1 COUNT=48
 ```bash
 make parse               # mode=deterministic (오프라인, 크레덴셜 불필요)
 ```
-**✅ 확인:** 마지막 줄 `comfozi-parse-fleet: done — rows=… det=… ai=0 failed=0`, `work/parsed.json` 생성.
+**✅ 확인:** 마지막 줄 `comfozi-parse-fleet: done — rows=… failed=0`, `work/parsed.json` 생성.
+> **진행 실시간(streaming):** 다른 터미널에서 `tail -f work/parsed.jsonl` — 파싱되는 대로 행이 쌓입니다(특히 느린 AI 모드에서 유용, 이상하면 바로 중단).
+> **세션 수:** `make parse SESSIONS=8` (동시 세션 ↑ = 빠름, 기본 4).
 > 이미지/스캔(png·jpg·pdf-image·photo)까지 AI로 파싱하려면 `make parse MODE=ai` — **본인 Claude 로그인 필요**(아래 "AI 파싱" 참고). 기본 deterministic 에서는 이미지가 "파싱 실패 후보"로 정직하게 표시됩니다.
 
 ### ③ GBM 훈련 — `make train`

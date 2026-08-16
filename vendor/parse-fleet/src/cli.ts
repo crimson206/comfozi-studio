@@ -11,6 +11,7 @@
  * Uses Node's built-in util.parseArgs (no external arg dep).
  */
 import { parseArgs } from 'node:util';
+import { appendFileSync, writeFileSync } from 'node:fs';
 import { promises as fs } from 'node:fs';
 import * as path from 'node:path';
 import { parseFleet, runPipeline, foldRun } from './index.js';
@@ -166,6 +167,8 @@ async function main(argv: string[]): Promise<void> {
     allowPositionals: true,
     options: {
       concurrency: { type: 'string' },
+      sessions: { type: 'string' },
+      stream: { type: 'string' },
       mode: { type: 'string' },
       'ai-input': { type: 'string' },
       out: { type: 'string' },
@@ -199,7 +202,7 @@ async function main(argv: string[]): Promise<void> {
   }
 
   const mode = (values.mode ?? 'auto') as FleetMode;
-  const concurrency = values.concurrency ? Number(values.concurrency) : 2;
+  const concurrency = values.sessions ? Number(values.sessions) : values.concurrency ? Number(values.concurrency) : 2;
   const aiInput = (values['ai-input'] ?? 'vision') as 'vision' | 'vision+ocr';
   if (aiInput !== 'vision' && aiInput !== 'vision+ocr') {
     process.stderr.write(`comfozi-parse-fleet: invalid --ai-input: ${aiInput}\n`);
@@ -252,11 +255,23 @@ async function main(argv: string[]): Promise<void> {
     return;
   }
 
+  const streamPath = values.stream as string | undefined;
+  if (streamPath) writeFileSync(streamPath, ''); // truncate before streaming
   const result = await parseFleet(docs, {
     mode,
     concurrency,
     aiInput,
     log: (m) => process.stderr.write(`  ${m}\n`),
+    onResult: streamPath
+      ? (out, doc, i) => {
+          const name = doc.filename ?? doc.path ?? doc.id;
+          const body = out.rows.length
+            ? out.rows.map((r) => JSON.stringify({ __doc: name, ...r })).join('\n') + '\n'
+            : JSON.stringify({ __doc: name, __rows: 0 }) + '\n';
+          appendFileSync(streamPath, body);
+          process.stderr.write(`  stream[${i + 1}/${docs.length}]: ${name} → ${out.rows.length} row(s)\n`);
+        }
+      : undefined,
   });
 
   const json = JSON.stringify(result, null, values.pretty ? 2 : undefined) + '\n';

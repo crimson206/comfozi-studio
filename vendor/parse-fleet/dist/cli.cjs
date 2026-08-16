@@ -26,6 +26,7 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 // src/cli.ts
 var import_node_util = require("util");
 var import_node_fs2 = require("fs");
+var import_node_fs3 = require("fs");
 var path2 = __toESM(require("path"), 1);
 
 // src/router.ts
@@ -776,7 +777,14 @@ async function parseFleet(docs, opts = {}) {
   const { runner: ai, pool } = resolveAiRunner(opts);
   const limit = opts.concurrency ?? 2;
   try {
-    const settled = await mapLimit(docs, limit, (doc) => routeOne(doc, opts, deterministic, ai));
+    const settled = await mapLimit(docs, limit, async (doc, index) => {
+      const r = await routeOne(doc, opts, deterministic, ai);
+      try {
+        opts.onResult?.(r.output, doc, index);
+      } catch {
+      }
+      return r;
+    });
     const routing = [];
     const laneRows = [];
     let failed = 0;
@@ -841,17 +849,17 @@ var EXT_FORMAT = {
 async function loadDoc(file, id) {
   const ext = path2.extname(file).toLowerCase();
   const isText = TEXT_EXT.has(ext);
-  const bytes = isText ? await import_node_fs2.promises.readFile(file, "utf8") : new Uint8Array(await import_node_fs2.promises.readFile(file));
+  const bytes = isText ? await import_node_fs3.promises.readFile(file, "utf8") : new Uint8Array(await import_node_fs3.promises.readFile(file));
   return { id, filename: path2.basename(file), path: path2.resolve(file), bytes, format: EXT_FORMAT[ext] };
 }
 async function collectDocs(targets) {
   const files = [];
   for (const t of targets) {
-    const stat = await import_node_fs2.promises.stat(t);
+    const stat = await import_node_fs3.promises.stat(t);
     if (stat.isDirectory()) {
-      for (const name of (await import_node_fs2.promises.readdir(t)).sort()) {
+      for (const name of (await import_node_fs3.promises.readdir(t)).sort()) {
         const full = path2.join(t, name);
-        if ((await import_node_fs2.promises.stat(full)).isFile()) files.push(full);
+        if ((await import_node_fs3.promises.stat(full)).isFile()) files.push(full);
       }
     } else {
       files.push(t);
@@ -924,13 +932,13 @@ function mockAiTransport() {
       ];
       const n = ++dispatch;
       await sleep2(120 + n % 3 * 90);
-      await import_node_fs2.promises.writeFile(payload.outPath, JSON.stringify({ rows, unreadable: null }));
+      await import_node_fs3.promises.writeFile(payload.outPath, JSON.stringify({ rows, unreadable: null }));
     },
     async collect(outPath, timeoutMs) {
       const deadline = Date.now() + timeoutMs;
       while (Date.now() < deadline) {
         try {
-          const text = await import_node_fs2.promises.readFile(outPath, "utf8");
+          const text = await import_node_fs3.promises.readFile(outPath, "utf8");
           if (text.length > 0) return JSON.parse(text);
         } catch {
         }
@@ -946,6 +954,8 @@ async function main(argv) {
     allowPositionals: true,
     options: {
       concurrency: { type: "string" },
+      sessions: { type: "string" },
+      stream: { type: "string" },
       mode: { type: "string" },
       "ai-input": { type: "string" },
       out: { type: "string" },
@@ -979,7 +989,7 @@ ${HELP}`);
     process.exit(1);
   }
   const mode = values.mode ?? "auto";
-  const concurrency = values.concurrency ? Number(values.concurrency) : 2;
+  const concurrency = values.sessions ? Number(values.sessions) : values.concurrency ? Number(values.concurrency) : 2;
   const aiInput = values["ai-input"] ?? "vision";
   if (aiInput !== "vision" && aiInput !== "vision+ocr") {
     process.stderr.write(`comfozi-parse-fleet: invalid --ai-input: ${aiInput}
@@ -1009,9 +1019,9 @@ ${HELP}`);
       onEvent: (ev) => process.stderr.write(`  \u25B8 ${ev.type}${"stage" in ev ? ` ${ev.stage}` : ""}
 `)
     });
-    await import_node_fs2.promises.mkdir(runsDir, { recursive: true });
+    await import_node_fs3.promises.mkdir(runsDir, { recursive: true });
     const jsonlPath = path2.join(runsDir, `${result2.runId}.jsonl`);
-    await import_node_fs2.promises.writeFile(jsonlPath, result2.jsonl);
+    await import_node_fs3.promises.writeFile(jsonlPath, result2.jsonl);
     const folded = (0, import_contract.foldRun)(result2.events);
     const stagesDone = Object.values(folded.stages).filter((s) => s.status === "done").length;
     process.stderr.write(
@@ -1020,7 +1030,7 @@ ${HELP}`);
 `
     );
     if (values.out) {
-      await import_node_fs2.promises.writeFile(values.out, JSON.stringify(result2, null, values.pretty ? 2 : void 0) + "\n");
+      await import_node_fs3.promises.writeFile(values.out, JSON.stringify(result2, null, values.pretty ? 2 : void 0) + "\n");
     }
     process.stderr.write(
       `comfozi-parse-fleet: done \u2014 rows=${result2.stats.totalRows} det=${result2.stats.deterministic} ai=${result2.stats.ai} failed=${result2.stats.failed}
@@ -1028,15 +1038,24 @@ ${HELP}`);
     );
     return;
   }
+  const streamPath = values.stream;
+  if (streamPath) (0, import_node_fs2.writeFileSync)(streamPath, "");
   const result = await parseFleet(docs, {
     mode,
     concurrency,
     aiInput,
     log: (m) => process.stderr.write(`  ${m}
-`)
+`),
+    onResult: streamPath ? (out, doc, i) => {
+      const name = doc.filename ?? doc.path ?? doc.id;
+      const body = out.rows.length ? out.rows.map((r) => JSON.stringify({ __doc: name, ...r })).join("\n") + "\n" : JSON.stringify({ __doc: name, __rows: 0 }) + "\n";
+      (0, import_node_fs2.appendFileSync)(streamPath, body);
+      process.stderr.write(`  stream[${i + 1}/${docs.length}]: ${name} \u2192 ${out.rows.length} row(s)
+`);
+    } : void 0
   });
   const json = JSON.stringify(result, null, values.pretty ? 2 : void 0) + "\n";
-  if (values.out) await import_node_fs2.promises.writeFile(values.out, json);
+  if (values.out) await import_node_fs3.promises.writeFile(values.out, json);
   else process.stdout.write(json);
   process.stderr.write(
     `comfozi-parse-fleet: done \u2014 rows=${result.stats.totalRows} det=${result.stats.deterministic} ai=${result.stats.ai} failed=${result.stats.failed}

@@ -810,7 +810,14 @@ async function parseFleet(docs, opts = {}) {
   const { runner: ai, pool } = resolveAiRunner(opts);
   const limit = opts.concurrency ?? 2;
   try {
-    const settled = await mapLimit(docs, limit, (doc) => routeOne(doc, opts, deterministic, ai));
+    const settled = await mapLimit(docs, limit, async (doc, index) => {
+      const r = await routeOne(doc, opts, deterministic, ai);
+      try {
+        opts.onResult?.(r.output, doc, index);
+      } catch {
+      }
+      return r;
+    });
     const routing = [];
     const laneRows = [];
     let failed = 0;

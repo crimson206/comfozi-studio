@@ -3,10 +3,11 @@ import {
   foldRun,
   parseFleet,
   runPipeline
-} from "./chunk-2KK7JVXD.js";
+} from "./chunk-YN72GIGU.js";
 
 // src/cli.ts
 import { parseArgs } from "util";
+import { appendFileSync, writeFileSync } from "fs";
 import { promises as fs } from "fs";
 import * as path from "path";
 var TEXT_EXT = /* @__PURE__ */ new Set([".csv", ".tsv", ".json", ".txt", ".eml", ".html", ".htm", ".md"]);
@@ -134,6 +135,8 @@ async function main(argv) {
     allowPositionals: true,
     options: {
       concurrency: { type: "string" },
+      sessions: { type: "string" },
+      stream: { type: "string" },
       mode: { type: "string" },
       "ai-input": { type: "string" },
       out: { type: "string" },
@@ -167,7 +170,7 @@ ${HELP}`);
     process.exit(1);
   }
   const mode = values.mode ?? "auto";
-  const concurrency = values.concurrency ? Number(values.concurrency) : 2;
+  const concurrency = values.sessions ? Number(values.sessions) : values.concurrency ? Number(values.concurrency) : 2;
   const aiInput = values["ai-input"] ?? "vision";
   if (aiInput !== "vision" && aiInput !== "vision+ocr") {
     process.stderr.write(`comfozi-parse-fleet: invalid --ai-input: ${aiInput}
@@ -216,12 +219,21 @@ ${HELP}`);
     );
     return;
   }
+  const streamPath = values.stream;
+  if (streamPath) writeFileSync(streamPath, "");
   const result = await parseFleet(docs, {
     mode,
     concurrency,
     aiInput,
     log: (m) => process.stderr.write(`  ${m}
-`)
+`),
+    onResult: streamPath ? (out, doc, i) => {
+      const name = doc.filename ?? doc.path ?? doc.id;
+      const body = out.rows.length ? out.rows.map((r) => JSON.stringify({ __doc: name, ...r })).join("\n") + "\n" : JSON.stringify({ __doc: name, __rows: 0 }) + "\n";
+      appendFileSync(streamPath, body);
+      process.stderr.write(`  stream[${i + 1}/${docs.length}]: ${name} \u2192 ${out.rows.length} row(s)
+`);
+    } : void 0
   });
   const json = JSON.stringify(result, null, values.pretty ? 2 : void 0) + "\n";
   if (values.out) await fs.writeFile(values.out, json);

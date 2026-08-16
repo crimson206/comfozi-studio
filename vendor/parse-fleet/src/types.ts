@@ -77,6 +77,8 @@ export interface FleetOptions {
   now?: string;
   /** progress log sink. */
   log?: (msg: string) => void;
+  /** streaming: fired as each document's lane output resolves (index = position in docs). */
+  onResult?: (out: LaneOutput, doc: DocRef, index: number) => void;
 }
 
 /** What a lane runner returns for a single document. */

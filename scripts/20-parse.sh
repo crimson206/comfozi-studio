@@ -4,8 +4,9 @@
 #   mode=ai / auto       이미지까지 AI 파싱 — 본인 Claude 세션(isesh) 필요, 전부 로컬
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-MODE="${1:-deterministic}"; SRC="${2:-$ROOT/work/raw}"
+MODE="${1:-deterministic}"; SRC="${2:-$ROOT/work/raw}"; SESS="${SESSIONS:-4}"
 mkdir -p "$ROOT/work"
 echo "▶ 파싱: $SRC (mode=$MODE) → work/parsed.json"
-node "$ROOT/vendor/parse-fleet/dist/cli.js" parse "$SRC" --mode "$MODE" --out "$ROOT/work/parsed.json" --pretty
-echo "✅ work/parsed.json"
+echo "  (진행 실시간: tail -f work/parsed.jsonl)"
+node "$ROOT/vendor/parse-fleet/dist/cli.js" parse "$SRC" --mode "$MODE" --sessions "$SESS" --out "$ROOT/work/parsed.json" --stream "$ROOT/work/parsed.jsonl" --pretty
+echo "✅ work/parsed.json  ·  스트림: work/parsed.jsonl"
