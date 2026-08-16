@@ -7,7 +7,7 @@ SESSIONS ?= 4
 BATCH ?= 8
 INPUT ?=
 
-.PHONY: setup generate parse train inbox all clean help
+.PHONY: setup generate parse train inbox all clean help install-parser
 
 help:
 	@echo "make setup     # 의존 설치(=Codespace postCreate 자동)"
@@ -31,6 +31,12 @@ train:
 
 inbox:
 	bash scripts/40-inbox.sh
+
+install-parser:   ## AI 파서 프로필/프롬프트를 ~/.ist/ 에 설치 (vendored, 배치 계약 포함)
+	mkdir -p ~/.ist/profiles ~/.ist/prompts/global
+	cp vendor/parse-fleet/profiles/*.md ~/.ist/profiles/
+	cp vendor/parse-fleet/prompts/*.md ~/.ist/prompts/global/
+	@echo "✅ comfozi-doc-parser 프로필 설치됨 (~/.ist/profiles/)"
 
 all:
 	MODE=$(MODE) INPUT=$(INPUT) bash scripts/run-all.sh $(SEED) $(COUNT)

@@ -61,8 +61,8 @@ claude login                                  # Claude 로그인
 # 2) isesh 툴체인(@ist) — snapshot 으로
 npm i -g @microwiseai/snapshot
 snapshot install @ist/beta                    # isesh · imessenger · skit  (detector-agent ✗ 뜨면 무시 — 파싱에 불필요)
-# 3) parse-fleet 파서 프로필(배치 계약)
-cd vendor/parse-fleet && skit install && cd ../..
+# 3) parse-fleet 파서 프로필(배치 계약) → ~/.ist/ 에 설치 (vendored, 배포 불필요)
+make install-parser
 ```
 설치 후 실행 (**X세션 × Y파일 = 2D 병렬**):
 ```bash
@@ -153,5 +153,5 @@ scripts/ , Makefile        파이프라인 스텝
 ## 문제 해결
 - `make` 가 "command not found @comfozi/…": `make setup` 을 먼저(또는 postCreate 완료 대기).
 - 파싱에서 이미지가 다 실패 후보: 정상(기본 deterministic). 이미지 파싱은 `MODE=ai`.
-- **`make parse MODE=ai` 가 `failed=전체`(ai=0):** `command -v tmux isesh claude`(빠지면 각각 설치) · `snapshot install @ist/beta` · `cd vendor/parse-fleet && skit install` · `claude login` 확인. (`detector-agent ✗` 는 무관.)
+- **`make parse MODE=ai` 가 `failed=전체`(ai=0):** `command -v tmux isesh claude`(빠지면 각각 설치) · `snapshot install @ist/beta` · `make install-parser`(파서 프로필) · `claude login` 확인. (`detector-agent ✗` 는 무관.)
 - 인박스 '파싱 결과'가 비어있음: `make parse` 후 `make inbox` 순서인지 확인(`work/parsed.json` → app/public 복사됨).
