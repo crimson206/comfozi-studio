@@ -34,10 +34,13 @@ glpkg install comfozi-approval-ml --pypi --group blaybus2026-vibe   # → export
 > - `export-gbm`은 **Python 3.11**(`>=3.11,<3.12`) 필요 — Codespace devcontainer가 자동. 기본 설치는 **torch/CUDA 없음**(사전계산 임베딩으로 데모 훈련).
 > - 로컬 PC면 추가로 **Node 20 · Python 3.11 · 한글폰트**(`fonts-nanum fonts-noto-cjk`) 필요 — Codespace는 devcontainer가 자동.
 
-**AI 파싱(이미지·스캔)까지 쓰려면** 추가로:
+### AI 파싱 준비물 (이미지·스캔)
+
+② 파싱은 이미지·스캔(png·jpg·사진·pdf-image)을 **본인 Claude 구독으로 로컬 vision 파싱**합니다. 그래서 **② 파싱 전에 미리** 아래를 깔아둡니다 — `comfozi-parse-fleet`가 이미지를 **로컬 Claude 세션 풀**(vision)에 분산하는데, 그 세션을 `tmux`(세션 호스트) 위에서 **본인 Claude Code로 띄우고**(`claude login` — 서버 0, 본인 Claude 구독으로 로컬에서 vision 추론), 세션 러너/메시징/프로필(`isesh`·`imessenger`·`skit`)을 `snapshot`으로 받기 때문입니다.
+
 ```bash
-sudo apt-get install -y tmux                          # mac: brew install tmux
-npm i -g @anthropic-ai/claude-code && claude login    # Claude Code + 로그인
+sudo apt-get install -y tmux                          # mac: brew install tmux  — AI 세션 호스트
+npm i -g @anthropic-ai/claude-code && claude login    # Claude Code 설치 + 로그인(본인 구독으로 로컬 vision 파싱)
 npm i -g @microwiseai/snapshot && snapshot install @ist/beta   # isesh·imessenger·skit  (detector-agent ✗ 뜨면 무시)
 skit install @comfozi/parse-fleet@0.1.1               # 파서 프로필/프롬프트 → ~/.ist/
 ```
@@ -56,8 +59,8 @@ comfozi-data-raw gen --seed 7 --count 24 --out work/raw
 ```bash
 comfozi-parse-fleet parse work/raw --mode auto --out work/parsed.json --pretty
 ```
-- 텍스트(csv·pdf-text 등) = **결정적**(pdfjs 텍스트레이어), 이미지·스캔(png·jpg·pdf-image·photo) = **AI vision**(로컬 Claude 세션).
-- `--mode auto`(기본, 자동 라우팅) · `--mode deterministic`(텍스트만, **AI 설치·로그인 불필요**) · `--mode ai`.
+- 텍스트(csv·pdf-text 등) = **결정적**(pdfjs 텍스트레이어), 이미지·스캔(png·jpg·pdf-image·photo) = **AI vision**(로컬 Claude 세션 — 위 [AI 파싱 준비물](#ai-파싱-준비물-이미지스캔) 선행).
+- `--mode auto`(기본, 자동 라우팅) · `--mode ai` · `--mode deterministic`(텍스트만 빠르게 볼 때, AI 불필요).
 - `--concurrency <K>` lane/AI-pool 동시성(기본 2). `--ai-input vision|vision+ocr`(기본 vision).
 - 세션 상태/디버그: `isesh list` · `isesh attach <세션명>`. (AI 세션이 끝낼 때까지 대기 — 타임아웃 없음.)
 
