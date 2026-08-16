@@ -70,10 +70,32 @@ make inbox
 ---
 
 ## AI 파싱 (선택 — 이미지/스캔까지)
-기본 파이프라인은 **로그인 없이** 돕니다. 이미지·스캔 문서까지 AI로 파싱하는 `MODE=ai` 만 Claude가 필요합니다.
-- parse-fleet이 **로컬 isesh 세션**(Claude vision)으로 파싱 — 본인 Claude 구독 사용, 전부 로컬.
-- Codespaces에서 인증: `claude login`(OAuth) 또는 **Codespaces Secret** 에 `ANTHROPIC_API_KEY` 등록.
-- (현재 studio 기본 셋업엔 미포함 — deterministic 경로가 기본값입니다.)
+기본 파이프라인은 **로그인 없이** 돕니다(`MODE=deterministic`). 이미지·스캔(png·jpg·pdf-image·photo)까지 AI로 파싱하는 `MODE=ai`/`MODE=auto` 만 Claude가 필요합니다. parse-fleet이 **로컬 isesh 세션**(Claude vision)으로 파싱 — 본인 Claude 구독 사용, 전부 로컬.
+
+> ⚠️ **기본 `make setup` 엔 아래 AI 도구가 포함되지 않습니다.** deterministic 이 기본값이며, AI 파싱을 쓰려면 아래를 직접 준비하세요.
+
+**AI 모드 준비 (1회):**
+```bash
+# 1) Claude Code CLI + isesh 설치 (본인 환경에)
+#    Claude Code: https://docs.anthropic.com/en/docs/claude-code  ·  isesh: 세션 러너
+# 2) parse-fleet 파서 프로필/프롬프트 설치 (isesh 가 comfozi-doc-parser 세션을 띄우는 데 필요)
+cd vendor/parse-fleet && skit install    # profile → ~/.ist/profiles/ , prompt → ~/.ist/prompts/global/
+cd ../..
+# 3) Claude 인증
+claude login                             # OAuth  (또는 Codespaces Secret 에 ANTHROPIC_API_KEY)
+```
+
+**실행:**
+```bash
+make parse MODE=ai        # 모든 문서를 AI(vision)로
+make parse MODE=auto      # 텍스트=결정적, 이미지/저신뢰만 AI 폴백
+# OCR 초벌 얹기: node vendor/parse-fleet/dist/cli.js parse work/raw --mode ai --ai-input vision+ocr --out work/parsed.json
+```
+
+**설정 파일 (커스터마이즈):**
+- `vendor/parse-fleet/profiles/comfozi-doc-parser.md` — AI 파서 세션 프로필(모델=Claude vision, 도구 Read/Glob/Write, `[DOC-EXTRACT]` 추출 계약)
+- `vendor/parse-fleet/prompts/parser-session-contract.md` — 세션 계약 프롬프트
+- `vendor/parse-fleet/skit.json` — 위 등록 + 설치 경로
 
 ## 본인 데이터로 하는 3가지
 - **본인 문서 파싱:** `work/raw/` 에 본인 파일 → `make parse` (이미지까지면 `MODE=ai`)
