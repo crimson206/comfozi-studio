@@ -17,7 +17,7 @@ glpkg config scope:set @comfozi blaybus2026-vibe
 
 echo "▶ (4/5) JS 의존 설치 + 빌드 (parse-fleet 패키지 · data-raw · app)"
 ( cd apps/comfozi.data-raw    && rm -f package-lock.json glpkg.lock.json && glpkg install && npm run build )
-( rm -f package-lock.json glpkg.lock.json && glpkg install --source gitlab )   # @comfozi/parse-fleet CLI+deps → node_modules (published, vendored 아님)
+( rm -f package-lock.json glpkg.lock.json && glpkg install @comfozi/parse-fleet@^0.1.1 --source gitlab )   # 파싱 CLI → node_modules
 ( cd apps/comfozi.app         && rm -f package-lock.json glpkg.lock.json && glpkg install )
 
 echo "▶ (5/5) python 의존 (approval-ml, GBM 훈련)"
@@ -25,9 +25,7 @@ echo "▶ (5/5) python 의존 (approval-ml, GBM 훈련)"
 
 # glpkg 가 남긴 레지스트리 .npmrc 정리 — 설치 끝나면 불필요(런타임/파싱/훈련은 glpkg 미사용).
 # 남겨두면 작업트리에 파일이 보이고, 재실행 시 "pre-existing .npmrc" 풋건 유발.
-rm -f "$ROOT/.npmrc" apps/*/.npmrc vendor/*/.npmrc 2>/dev/null || true
+rm -f "$ROOT/.npmrc" apps/*/.npmrc 2>/dev/null || true
 
 echo ""
-echo "✅ 셋업 완료. 다음 중 하나:"
-echo "   make all              # 생성→파싱→훈련→인박스 한 번에"
-echo "   또는 README 의 스텝을 하나씩 (make generate / parse / train / inbox)"
+echo "✅ 셋업 완료. 이제 README.md 의 '2. 파이프라인' 스텝을 순서대로 실행하세요 (①생성 → ②파싱 → ③훈련 → ④인박스)."
