@@ -60,8 +60,7 @@ npm i -g @anthropic-ai/claude-code
 claude login                                  # Claude 로그인
 # 2) isesh 툴체인(@ist) — snapshot 으로
 npm i -g @microwiseai/snapshot
-ist auth login                                # IST 인증 (@ist 레지스트리 접근)
-snapshot install @ist/beta                    # isesh · imessenger · skit
+snapshot install @ist/beta                    # isesh · imessenger · skit  (detector-agent ✗ 뜨면 무시 — 파싱에 불필요)
 # 3) parse-fleet 파서 프로필(배치 계약)
 cd vendor/parse-fleet && skit install && cd ../..
 ```
@@ -117,7 +116,7 @@ AI 파싱은 "서버 없이, 본인 Claude 구독으로" 돌리기 위해 우리
 >
 > **왜 세션 풀?** 문서마다 Claude를 콜드스타트하면 대량(수백 건)에서 느리고 낭비됩니다 → isesh가 **warm 세션 K개를 재사용**하며 `[DOC-EXTRACT]` 요청을 백프레셔로 흘려보냅니다(동시성 = `--concurrency K`, 기본 2). **comfozi 실제 제품이 쓰는 세션 인프라 그대로**라, AI 파싱을 돌려보는 것 자체가 우리 도구 실물 체험이 됩니다.
 
-> ⚠️ **설치·실행 명령은 위 스텝 ②(b) 참고** (거기 순서대로 있습니다). `@ist/beta`는 **IST 계정 필요 → 오너/팀 전용**(외부 심사자는 deterministic 경로).
+> ⚠️ **설치·실행은 위 스텝 ②(b) 참고.** `@ist/beta`는 tokenless로 설치됩니다(그중 `detector-agent`만 인증 필요한데 **파싱엔 안 쓰니 실패해도 무시**). 필요한 건 `claude login`뿐.
 
 **세부 옵션 (CLI 직접):**
 ```bash
@@ -154,5 +153,5 @@ scripts/ , Makefile        파이프라인 스텝
 ## 문제 해결
 - `make` 가 "command not found @comfozi/…": `make setup` 을 먼저(또는 postCreate 완료 대기).
 - 파싱에서 이미지가 다 실패 후보: 정상(기본 deterministic). 이미지 파싱은 `MODE=ai`.
-- **`make parse MODE=ai` 가 `failed=전체`(ai=0):** AI 세션을 못 띄운 것. 위 "AI 파싱" 준비를 다 했는지 — `command -v tmux isesh claude`(빠지면 각각 설치), `ist auth login`, `snapshot install @ist/beta`, `cd vendor/parse-fleet && skit install`, `claude login`.
+- **`make parse MODE=ai` 가 `failed=전체`(ai=0):** `command -v tmux isesh claude`(빠지면 각각 설치) · `snapshot install @ist/beta` · `cd vendor/parse-fleet && skit install` · `claude login` 확인. (`detector-agent ✗` 는 무관.)
 - 인박스 '파싱 결과'가 비어있음: `make parse` 후 `make inbox` 순서인지 확인(`work/parsed.json` → app/public 복사됨).
