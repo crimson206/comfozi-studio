@@ -4,3 +4,5 @@ __pycache__/
 .venv/
 *.pyc
 dist-work/
+.npmrc
+glpkg.lock.json
