@@ -34,16 +34,27 @@ glpkg install comfozi-approval-ml --pypi --group blaybus2026-vibe   # → export
 > - `export-gbm`은 **Python 3.11**(`>=3.11,<3.12`) 필요 — Codespace devcontainer가 자동. 기본 설치는 **torch/CUDA 없음**(사전계산 임베딩으로 데모 훈련).
 > - 로컬 PC면 추가로 **Node 20 · Python 3.11 · 한글폰트**(`fonts-nanum fonts-noto-cjk`) 필요 — Codespace는 devcontainer가 자동.
 
-### AI 파싱 준비물 (이미지·스캔)
+### AI 파싱 준비물 — Claude Code 하나면 끝 (headless 기본)
 
-② 파싱은 이미지·스캔(png·jpg·사진·pdf-image)을 **본인 Claude 구독으로 로컬 vision 파싱**합니다. 그래서 **② 파싱 전에 미리** 아래를 깔아둡니다 — `comfozi-parse-fleet`가 이미지를 **로컬 Claude 세션 풀**(vision)에 분산하는데, 그 세션을 `tmux`(세션 호스트) 위에서 **본인 Claude Code로 띄우고**(`claude login` — 서버 0, 본인 Claude 구독으로 로컬에서 vision 추론), 세션 러너/메시징/프로필(`isesh`·`imessenger`·`skit`)을 `snapshot`으로 받기 때문입니다.
+② 파싱은 이미지·스캔(png·jpg·사진·pdf-image)을 **본인 Claude 구독으로 로컬 vision 파싱**합니다. 기본 엔진은 **headless(`claude -p`)** 라 필요한 건 **Claude Code 설치 + 로그인**뿐입니다 — 파서 프로필은 `@comfozi/parse-fleet` 패키지에 동봉되어 있어 `tmux`·`snapshot`·`isesh`·`skit`·**detector-agent 모두 불필요**:
 
 ```bash
-sudo apt-get install -y tmux                          # mac: brew install tmux  — AI 세션 호스트
-npm i -g @anthropic-ai/claude-code && claude login    # Claude Code 설치 + 로그인(본인 구독으로 로컬 vision 파싱)
-npm i -g @microwiseai/snapshot && snapshot install @ist/beta   # isesh·imessenger·skit  (detector-agent ✗ 뜨면 무시)
-skit install @comfozi/parse-fleet@0.1.1               # 파서 프로필/프롬프트 → ~/.ist/
+npm i -g @anthropic-ai/claude-code && claude login    # 본인 Claude 구독으로 로컬 vision 파싱
 ```
+> **이 데모는 headless 로 detector-agent 없이 끝까지 완주됩니다.** `claude -p`(print 모드)가 `[DOC-EXTRACT]` 요청마다 프롬프트 없이 1샷 응답·종료 → 파싱이 permission 대기로 멈추지 않습니다.
+
+<details>
+<summary><b>고급(선택)</b> — 대화형 isesh 세션 풀 + smon 자동승인 (<code>--engine isesh --supervise</code>)</summary>
+
+headless 대신 **기존 대화형 세션 풀**(③ fan-out 시각화 등)을 쓰려면, `smon`이 세션의 permission 대기를 자동승인하게 합니다. **detector-agent(오너 준비) + `@ist/smon-kit` 필요:**
+```bash
+sudo apt-get install -y tmux                          # mac: brew install tmux  — AI 세션 호스트
+npm i -g @anthropic-ai/claude-code && claude login    # Claude Code + 로그인
+npm i -g @microwiseai/snapshot && snapshot install @ist/beta   # isesh·imessenger·skit·smon
+skit install @comfozi/parse-fleet@0.2.0               # 파서 프로필/프롬프트 → ~/.ist/
+```
+그다음 ②를 `--engine isesh --supervise` 로 실행하면 파서 세션을 smon이 감시·자동승인합니다.
+</details>
 
 ---
 
@@ -57,12 +68,12 @@ comfozi-data-raw gen --seed 7 --count 24 --out work/raw
 
 ### ② 파싱 → `work/parsed.json`
 ```bash
-comfozi-parse-fleet parse work/raw --mode auto --out work/parsed.json --pretty
+comfozi-parse-fleet parse work/raw --mode auto --engine headless --out work/parsed.json --pretty
 ```
-- 텍스트(csv·pdf-text 등) = **결정적**(pdfjs 텍스트레이어), 이미지·스캔(png·jpg·pdf-image·photo) = **AI vision**(로컬 Claude 세션 — 위 [AI 파싱 준비물](#ai-파싱-준비물-이미지스캔) 선행).
-- `--mode auto`(기본, 자동 라우팅) · `--mode ai` · `--mode deterministic`(텍스트만 빠르게 볼 때, AI 불필요).
-- `--concurrency <K>` lane/AI-pool 동시성(기본 2). `--ai-input vision|vision+ocr`(기본 vision).
-- 세션 상태/디버그: `isesh list` · `isesh attach <세션명>`. (AI 세션이 끝낼 때까지 대기 — 타임아웃 없음.)
+- **기본 권장 = `--engine headless`**: 이미지·스캔을 `claude -p`(headless)로 파싱 → **프롬프트 없이 완주**(smon·detector-agent 불필요). 텍스트(csv·pdf-text 등)는 `--mode auto`가 **결정적**(pdfjs 텍스트레이어)으로 먼저 처리하고, 이미지·스캔(png·jpg·pdf-image·photo)만 headless AI vision으로 보냅니다.
+- `--mode auto`(기본, 텍스트 결정적 우선 + 이미지 AI) · `--mode ai`(전부 AI) · `--mode deterministic`(텍스트만, AI 불필요).
+- `--retry <n>` 실패 문서 자동 재시도(기본 1) — 일시적 실패에도 안정적으로 완주. `--concurrency <K>` 동시성(기본 2). `--ai-input vision|vision+ocr`(기본 vision).
+- **고급**: `--engine isesh --supervise` — 대화형 세션 풀 + smon 자동승인(위 준비물의 고급 섹션, detector-agent 필요). 세션 확인: `isesh list` · `isesh attach <세션명>`.
 
 ### ③ GBM 훈련·export → `work/gbm/`
 ```bash
