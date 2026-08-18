@@ -28,6 +28,7 @@ npm i -g @glpkg/cli@0.12.0
 glpkg install -g @comfozi/data-raw    --group blaybus2026-vibe --source gitlab   # → comfozi-data-raw
 glpkg install -g @comfozi/parse-fleet --group blaybus2026-vibe --source gitlab   # → comfozi-parse-fleet
 glpkg install -g @comfozi/app         --group blaybus2026-vibe --source gitlab   # → comfozi-app
+# ↑ 위 3개 전역 설치 후 같은 셸에선 방금 설치된 전역 bin이 안 잡힐 수 있음 → 새 터미널을 열거나 `hash -r`(또는 셸 재로그인)로 PATH 갱신 후 아래 ML 설치/파이프라인 실행
 glpkg install comfozi-approval-ml --pypi --group blaybus2026-vibe   # → export-gbm (torch-free base)
 ```
 > - `export-gbm`은 **Python 3.11**(`>=3.11,<3.12`) 필요 — Codespace devcontainer가 자동. 기본 설치는 **torch/CUDA 없음**(사전계산 임베딩으로 데모 훈련).
@@ -38,9 +39,20 @@ glpkg install comfozi-approval-ml --pypi --group blaybus2026-vibe   # → export
 ② 파싱은 이미지·스캔(png·jpg·사진·pdf-image)을 **본인 Claude 구독으로 로컬 vision 파싱**합니다. 기본 엔진은 **headless(`claude -p`)** 라 필요한 건 **Claude Code 설치 + 로그인**뿐입니다 — 파서 프로필은 `@comfozi/parse-fleet` 패키지에 동봉되어 있어 `tmux`·`snapshot`·`isesh`·`skit`·**detector-agent 모두 불필요**:
 
 ```bash
+# 공통 사전요구: PDF→PNG 래스터화(pdftoppm)
+sudo apt-get install -y poppler-utils                 # mac: brew install poppler — pdf 파싱에 필요
+
+# Claude 구독 (기본) — --engine headless
 npm i -g @anthropic-ai/claude-code && claude login    # 본인 Claude 구독으로 로컬 vision 파싱
 ```
 > **이 데모는 headless 로 detector-agent 없이 끝까지 완주됩니다.** `claude -p`(print 모드)가 `[DOC-EXTRACT]` 요청마다 프롬프트 없이 1샷 응답·종료 → 파싱이 permission 대기로 멈추지 않습니다.
+
+**Codex 구독만 있다면** — `--engine headless --backend codex` 로 `codex exec` vision 파싱(poppler 는 공통 사전요구):
+```bash
+sudo apt-get install -y poppler-utils                 # (공통) PDF→PNG 래스터화
+codex login                                           # 본인 Codex(OpenAI) 구독 — codex CLI 설치 후 로그인
+```
+그다음 ②를 `--engine headless --backend codex` 로 실행합니다(아래 ② 파싱 참고).
 
 <details>
 <summary><b>고급(선택)</b> — 대화형 isesh 세션 풀 + smon 자동승인 (<code>--engine isesh --supervise</code>)</summary>
@@ -50,9 +62,12 @@ headless 대신 **기존 대화형 세션 풀**(③ fan-out 시각화 등)을 �
 sudo apt-get install -y tmux                          # mac: brew install tmux  — AI 세션 호스트
 npm i -g @anthropic-ai/claude-code && claude login    # Claude Code + 로그인
 npm i -g @microwiseai/snapshot && snapshot install @ist/beta   # isesh·imessenger·skit·smon
-skit install @comfozi/parse-fleet@0.2.0               # 파서 프로필/프롬프트 → ~/.ist/
+skit install @comfozi/parse-fleet@0.2.1               # 파서 프로필/프롬프트 → ~/.ist/
+glpkg install -g @ist/detector-agent                  # smon 승인 봇(detector-agent) 설치
+detector-agent start                                  # ★ 승인 봇 기동(백그라운드) — 안 켜면 자동승인 안 됨
+detector-agent status                                 # 떠 있는지 확인
 ```
-그다음 ②를 `--engine isesh --supervise` 로 실행하면 파서 세션을 smon이 감시·자동승인합니다.
+그다음 ②를 `--engine isesh --supervise` 로 실행하면 파서 세션을 smon이 감시·자동승인합니다. **`detector-agent` 를 안 켜두면 smon 이 승인 못 하고 tierD:no-match("no bot") 에서 멈춥니다** — 반드시 먼저 `detector-agent start`.
 </details>
 
 ---
@@ -71,13 +86,31 @@ comfozi-data-raw gen --seed 7 --count 24 --out work/raw
 12형식(csv·xlsx·json·txt·eml·html·md·pdf-text·pdf-image·png·jpg·photo) × 난이도. *(본인 문서면 이 단계 건너뛰고 `work/raw/`에 직접 넣기.)* 형식 목록: `comfozi-data-raw formats`.
 
 ### ② 파싱 → `work/parsed.json`
+
+**데모 3종 — 파싱에서 보여줄 3가지** (모두 `work/raw` → `work/parsed.json`, 하나만 골라 실행):
 ```bash
-comfozi-parse-fleet parse work/raw --mode auto --engine headless --out work/parsed.json --pretty
+# ① claude headless (기본·권장) — 본인 Claude 구독, claude -p 무프롬프트 완주.
+comfozi-parse-fleet parse work/raw --mode auto --engine headless --backend claude --out work/parsed.json --pretty
+
+# ② codex headless (Codex 구독만 있을 때) — codex exec vision 파싱.
+comfozi-parse-fleet parse work/raw --mode auto --engine headless --backend codex --out work/parsed.json --pretty
+
+# ③ claude isesh (고급) — 대화형 세션 풀 + smon 자동승인, ③ fan-out 시각화용.
+#    ▶ 전제: 실행 전에 detector-agent(smon 승인 봇)를 먼저 켜둘 것! (아래 ⚠️)
+comfozi-parse-fleet parse work/raw --mode auto --engine isesh --supervise --out work/parsed.json --pretty
 ```
-- **기본 권장 = `--engine headless`**: 이미지·스캔을 `claude -p`(headless)로 파싱 → **프롬프트 없이 완주**(smon·detector-agent 불필요). 텍스트(csv·pdf-text 등)는 `--mode auto`가 **결정적**(pdfjs 텍스트레이어)으로 먼저 처리하고, 이미지·스캔(png·jpg·pdf-image·photo)만 headless AI vision으로 보냅니다.
+> ⚠️ **③ 전제 — detector-agent 를 먼저 켜라.** `--supervise` 의 smon 자동승인은 승인 봇 **detector-agent** 가 떠 있어야 동작합니다. 안 켜면 smon 이 세션 permission 을 자동승인 못 하고 **승인 대기/에스컬레이션(tierD:no-match "no bot")** 에서 멈춥니다. ③ 파싱 **전에** 먼저 기동하세요(①·② headless 는 불필요 — `claude -p`/`codex exec` 자체가 무프롬프트):
+> ```bash
+> detector-agent start        # smon 승인 봇 기동(백그라운드 데몬) — 모든 ist-- 세션 자동 감지
+> detector-agent status       # 떠 있는지 확인
+> # 미설치면: glpkg install -g @ist/detector-agent   (@ist/smon-kit 계열)
+> ```
+
+- **①(기본 권장) = `--engine headless --backend claude`**: 이미지·스캔을 `claude -p`(headless)로 파싱 → **프롬프트 없이 완주**(smon·detector-agent 불필요). 텍스트(csv·pdf-text 등)는 `--mode auto`가 **결정적**(pdfjs 텍스트레이어)으로 먼저 처리하고, 이미지·스캔(png·jpg·pdf-image·photo)만 headless AI vision으로 보냅니다.
+- **② Codex 구독**이면 `--backend codex`(headless `codex exec`). 기본은 `--backend claude`. (codex 는 isesh 세션 풀도 지원하지만 데모 실행 라인은 위 3종만 — 아래 동작 원리 매트릭스 참고.)
+- **③ 고급 `--engine isesh --supervise`** — 대화형 세션 풀 + smon 자동승인. **먼저 `detector-agent start`(위 ⚠️)** + 위 준비물의 고급 섹션(detector-agent + `@ist/smon-kit` 필요). 세션 확인: `isesh list` · `isesh attach <세션명>`.
 - `--mode auto`(기본, 텍스트 결정적 우선 + 이미지 AI) · `--mode ai`(전부 AI) · `--mode deterministic`(텍스트만, AI 불필요).
 - `--retry <n>` 실패 문서 자동 재시도(기본 1) — 일시적 실패에도 안정적으로 완주. `--concurrency <K>` 동시성(기본 2). `--ai-input vision|vision+ocr`(기본 vision).
-- **고급**: `--engine isesh --supervise` — 대화형 세션 풀 + smon 자동승인(위 준비물의 고급 섹션, detector-agent 필요). 세션 확인: `isesh list` · `isesh attach <세션명>`.
 
 > `work/parsed.json`은 ④ 인박스의 **검수 대상 데이터**입니다 — ③ GBM의 훈련 입력이 아닙니다(라벨 없음).
 
@@ -106,7 +139,16 @@ comfozi-app --parsed work/parsed.json --gbm work/gbm --host 0.0.0.0
 
 ## 동작 원리 (AI 파싱)
 `comfozi-parse-fleet`가 이미지/스캔을 **본인 Claude 구독으로 로컬 vision 파싱**합니다. 기본 엔진 **headless**는 `[DOC-EXTRACT]` 요청마다 `claude -p`(print) 1샷을 띄워 **패키지에 동봉된 파서 계약**(`comfozi-doc-parser` 프로필)을 system prompt로 주고, `--allowedTools Read Write Glob`로 이미지를 읽어 RawRow JSON을 씁니다 — 프롬프트 없이 응답·종료. **서버 0 · 전부 로컬.**
-- 고급 `--engine isesh --supervise`는 대화형 세션 풀(`isesh`·`imessenger`)을 `smon`이 감시·자동승인합니다. 이 경로의 파서 프로필은 `skit install @comfozi/parse-fleet@0.2.0`으로 `~/.ist/`에 설치.
+- 고급 `--engine isesh --supervise`는 대화형 세션 풀(`isesh`·`imessenger`)을 `smon`이 감시·자동승인합니다. 이 경로의 파서 프로필은 `skit install @comfozi/parse-fleet@0.2.1`으로 `~/.ist/`에 설치.
+
+**엔진 × 백엔드 매트릭스** — `--engine`(headless|isesh) × `--backend`(claude|codex) 4조합 모두 지원. `--model <name>`로 모델 오버라이드:
+
+| `--engine` | `--backend` | 실행 방식 | 승인 |
+|---|---|---|---|
+| `headless` (권장 기본) | `claude` (기본) | `claude -p` 1샷 | 무프롬프트 (smon·detector-agent 불필요) |
+| `headless` | `codex` | `codex exec` | 무프롬프트 (smon·detector-agent 불필요) |
+| `isesh` (고급) | `claude` (기본) | claude 대화형 세션 풀 | `--supervise` → smon **claude** approver |
+| `isesh` (고급) | `codex` | codex 대화형 세션 풀 | `--supervise` → smon **codex** approver |
 
 ## 구조 (thin repo)
 ```
@@ -125,8 +167,9 @@ work/                  파이프라인 산출물(gitignore): raw/ · parsed.json
 
 ## 문제 해결
 - **`comfozi-*: command not found`**: 해당 설치 줄을 먼저 (`glpkg install -g @comfozi/… --group blaybus2026-vibe --source gitlab`, `export-gbm`은 `glpkg install comfozi-approval-ml --pypi --group blaybus2026-vibe`). 전역 npm bin이 PATH에 있는지 확인. 방금 전역 설치를 마친 **같은 셸**이면 새로 깐 bin이 PATH/셸 해시에 아직 안 잡힐 수 있음 → 새 터미널을 열거나 `hash -r`로 갱신.
+- **PDF 변환/파싱 실패**: `poppler-utils`(pdftoppm) 미설치일 수 있음 → `sudo apt-get install -y poppler-utils` (mac: `brew install poppler`).
 - **`export-gbm` 설치 실패**: ① Python이 **3.11**이어야 함(`>=3.11,<3.12`). ② 시스템 파이썬이 externally-managed(**PEP 668**)면 `glpkg … --pypi`가 거부될 수 있음 — venv에서 설치하세요: `python3 -m venv .venv && . .venv/bin/activate` 후 `glpkg install comfozi-approval-ml --pypi --group blaybus2026-vibe`. (Codespace devcontainer는 해당 없음.)
-- **파싱이 이미지에서 `failed`**(headless 기본): `claude login` + `command -v claude` 확인. **root로 실행하지 마세요** — `claude -p`가 root/sudo에서 `--dangerously-skip-permissions`를 거부합니다(일반 사용자로 실행). isesh 경로면 `skit install @comfozi/parse-fleet@0.2.0` + `isesh list`.
+- **파싱이 이미지에서 `failed`**(headless 기본): `claude login` + `command -v claude` 확인. **root로 실행하지 마세요** — `claude -p`가 root/sudo에서 `--dangerously-skip-permissions`를 거부합니다(일반 사용자로 실행). isesh 경로면 `skit install @comfozi/parse-fleet@0.2.1` + `isesh list`.
 - **`comfozi-app` 실행 시 `EACCES … dist/parsed.json`**: 전역 설치 위치가 root 소유일 때(예: `sudo npm i -g`), **설치한 사용자로** `comfozi-app`을 실행하세요(전역 패키지의 `dist/`에 주입하므로). Codespace(사용자 소유 전역)는 해당 없음.
 - **인박스 ‘파싱 결과’가 비어있음**: `comfozi-app`을 `--parsed work/parsed.json`으로 실행했는지 확인.
 - **BYO에서 `EmbedBackendMissing`(e5 필요)**: `export-gbm setup` 먼저(또는 `pip install 'comfozi-approval-ml[embed]'`).
