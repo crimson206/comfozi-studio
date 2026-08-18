@@ -96,17 +96,15 @@ comfozi-parse-fleet parse work/raw --mode auto --engine headless --backend claud
 comfozi-parse-fleet parse work/raw --mode auto --engine headless --backend codex --out work/parsed.json --pretty
 
 # ③ claude isesh (고급) — 대화형 세션 풀 + smon 자동승인, ③ fan-out 시각화용.
-#    ▶ 전제: 실행 전에 detector-agent(smon 승인 봇)를 먼저 켜둘 것! (아래 ⚠️)
+# ── 준비(설치·기동) 먼저 ──
+npm install -g @microwiseai/snapshot && snapshot install @ist/beta   # isesh·imessenger·skit·smon 툴체인
+skit install @comfozi/parse-fleet@0.2.1                              # 파서 프로필 → ~/.ist/profiles/ (isesh -p 가 찾음)
+detector-agent start                                                 # smon 승인 봇 기동(백그라운드 데몬)  ※ 미설치면 glpkg install -g @ist/detector-agent
+detector-agent status                                                # 떠 있는지 확인
+# ── 그다음 파싱 실행 ──
 comfozi-parse-fleet parse work/raw --mode auto --engine isesh --supervise --out work/parsed.json --pretty
 ```
-> ⚠️ **③ 전제 — isesh 툴체인 + 파서 프로필 + detector-agent 를 먼저.** isesh 경로는 (1) `snapshot` 으로 설치되는 **isesh·skit·smon 툴체인**, (2) 파서 프로필(`comfozi-doc-parser`)이 `~/.ist/profiles/` 에 있어야 하고(pool 이 `isesh start -p comfozi-doc-parser` 로 세션을 띄움), (3) 승인 봇 **detector-agent** 가 떠 있어야 `--supervise` smon 자동승인이 동작합니다. 안 갖추면 각각 세션 안 뜸 / 프로필 못 찾음 / **승인 대기·에스컬레이션(tierD:no-match "no bot")** 에서 멈춥니다. ③ 파싱 **전에** 먼저 실행하세요(①·② headless 는 **전부 불필요** — Claude Code/codex CLI + poppler 만, 패키지 내장 프로필 + `claude -p`/`codex exec` 무프롬프트):
-> ```bash
-> npm install -g @microwiseai/snapshot            # ① isesh·imessenger·skit·smon 툴체인
-> snapshot install @ist/beta
-> skit install @comfozi/parse-fleet@0.2.1         # ② 파서 프로필 → ~/.ist/profiles/ (isesh -p 가 찾는 프로필)
-> detector-agent start                            # ③ smon 승인 봇 기동(백그라운드 데몬) — 모든 ist-- 세션 자동 감지
-> detector-agent status                           # 떠 있는지 확인  (미설치면: glpkg install -g @ist/detector-agent — @ist/smon-kit 계열)
-> ```
+> ⚠️ **③ 전제 순서 = 설치 먼저 → parse 나중.** 위 준비 세 줄(snapshot 툴체인 → 파서 프로필 → detector-agent)을 갖춰야 isesh 세션 풀이 뜨고 `--supervise` smon 자동승인이 동작합니다. 특히 **detector-agent 를 안 켜면 승인 대기·에스컬레이션(tierD:no-match "no bot")** 에서 멈춥니다. **headless ①·② 는 이 준비물 전부 불필요**(Claude Code/codex CLI + poppler 만, 내장 프로필 + `claude -p`/`codex exec` 무프롬프트).
 
 - **①(기본 권장) = `--engine headless --backend claude`**: 이미지·스캔을 `claude -p`(headless)로 파싱 → **프롬프트 없이 완주**(smon·detector-agent 불필요). 텍스트(csv·pdf-text 등)는 `--mode auto`가 **결정적**(pdfjs 텍스트레이어)으로 먼저 처리하고, 이미지·스캔(png·jpg·pdf-image·photo)만 headless AI vision으로 보냅니다.
 - **② Codex 구독**이면 `--backend codex`(headless `codex exec`). 기본은 `--backend claude`. (codex 는 isesh 세션 풀도 지원하지만 데모 실행 라인은 위 3종만 — 아래 동작 원리 매트릭스 참고.)
