@@ -18,17 +18,16 @@
 
 ## 1. 준비 (설치, 1회)
 
-**glpkg(tokenless 패키지 매니저) + `@comfozi` scope 매핑:**
+**glpkg(tokenless 패키지 매니저):**
 ```bash
-npm i -g @glpkg/cli
-glpkg config scope:set @comfozi blaybus2026-vibe
+npm i -g @glpkg/cli@0.12.0
 ```
 
 **4개 CLI를 이름으로 설치:**
 ```bash
-glpkg install -g @comfozi/data-raw    --source gitlab   # → comfozi-data-raw
-glpkg install -g @comfozi/parse-fleet --source gitlab   # → comfozi-parse-fleet
-glpkg install -g @comfozi/app         --source gitlab   # → comfozi-app
+glpkg install -g @comfozi/data-raw    --group blaybus2026-vibe --source gitlab   # → comfozi-data-raw
+glpkg install -g @comfozi/parse-fleet --group blaybus2026-vibe --source gitlab   # → comfozi-parse-fleet
+glpkg install -g @comfozi/app         --group blaybus2026-vibe --source gitlab   # → comfozi-app
 glpkg install comfozi-approval-ml --pypi --group blaybus2026-vibe   # → export-gbm (torch-free base)
 ```
 > - `export-gbm`은 **Python 3.11**(`>=3.11,<3.12`) 필요 — Codespace devcontainer가 자동. 기본 설치는 **torch/CUDA 없음**(사전계산 임베딩으로 데모 훈련).
@@ -125,7 +124,7 @@ work/                  파이프라인 산출물(gitignore): raw/ · parsed.json
 - 합성/샘플 데이터로 **파이프라인·스케일 거동**을 보여줍니다. 실제 승인 정확도는 실제 라벨 이력이 있어야 하며 그 경로가 `export-gbm --input ...`.
 
 ## 문제 해결
-- **`comfozi-*: command not found`**: 해당 설치 줄을 먼저 (`glpkg install -g @comfozi/… --source gitlab`, `export-gbm`은 `glpkg install comfozi-approval-ml --pypi --group blaybus2026-vibe`). 전역 npm bin이 PATH에 있는지 확인.
+- **`comfozi-*: command not found`**: 해당 설치 줄을 먼저 (`glpkg install -g @comfozi/… --group blaybus2026-vibe --source gitlab`, `export-gbm`은 `glpkg install comfozi-approval-ml --pypi --group blaybus2026-vibe`). 전역 npm bin이 PATH에 있는지 확인. 방금 전역 설치를 마친 **같은 셸**이면 새로 깐 bin이 PATH/셸 해시에 아직 안 잡힐 수 있음 → 새 터미널을 열거나 `hash -r`로 갱신.
 - **`export-gbm` 설치 실패**: ① Python이 **3.11**이어야 함(`>=3.11,<3.12`). ② 시스템 파이썬이 externally-managed(**PEP 668**)면 `glpkg … --pypi`가 거부될 수 있음 — venv에서 설치하세요: `python3 -m venv .venv && . .venv/bin/activate` 후 `glpkg install comfozi-approval-ml --pypi --group blaybus2026-vibe`. (Codespace devcontainer는 해당 없음.)
 - **파싱이 이미지에서 `failed`**(headless 기본): `claude login` + `command -v claude` 확인. **root로 실행하지 마세요** — `claude -p`가 root/sudo에서 `--dangerously-skip-permissions`를 거부합니다(일반 사용자로 실행). isesh 경로면 `skit install @comfozi/parse-fleet@0.2.0` + `isesh list`.
 - **`comfozi-app` 실행 시 `EACCES … dist/parsed.json`**: 전역 설치 위치가 root 소유일 때(예: `sudo npm i -g`), **설치한 사용자로** `comfozi-app`을 실행하세요(전역 패키지의 `dist/`에 주입하므로). Codespace(사용자 소유 전역)는 해당 없음.
