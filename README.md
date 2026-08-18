@@ -99,11 +99,11 @@ comfozi-parse-fleet parse work/raw --mode auto --engine headless --backend codex
 #    ▶ 전제: 실행 전에 detector-agent(smon 승인 봇)를 먼저 켜둘 것! (아래 ⚠️)
 comfozi-parse-fleet parse work/raw --mode auto --engine isesh --supervise --out work/parsed.json --pretty
 ```
-> ⚠️ **③ 전제 — detector-agent 를 먼저 켜라.** `--supervise` 의 smon 자동승인은 승인 봇 **detector-agent** 가 떠 있어야 동작합니다. 안 켜면 smon 이 세션 permission 을 자동승인 못 하고 **승인 대기/에스컬레이션(tierD:no-match "no bot")** 에서 멈춥니다. ③ 파싱 **전에** 먼저 기동하세요(①·② headless 는 불필요 — `claude -p`/`codex exec` 자체가 무프롬프트):
+> ⚠️ **③ 전제 — 파서 프로필 설치 + detector-agent 기동을 먼저.** isesh 경로는 (1) 파서 프로필(`comfozi-doc-parser`)이 `~/.ist/profiles/` 에 있어야 하고(pool 이 `isesh start -p comfozi-doc-parser` 로 세션을 띄움), (2) 승인 봇 **detector-agent** 가 떠 있어야 `--supervise` smon 자동승인이 동작합니다. 안 갖추면 각각 프로필 못 찾음 / **승인 대기·에스컬레이션(tierD:no-match "no bot")** 에서 멈춥니다. ③ 파싱 **전에** 먼저 실행하세요(①·② headless 는 **둘 다 불필요** — 패키지 내장 프로필 + `claude -p`/`codex exec` 무프롬프트):
 > ```bash
-> detector-agent start        # smon 승인 봇 기동(백그라운드 데몬) — 모든 ist-- 세션 자동 감지
-> detector-agent status       # 떠 있는지 확인
-> # 미설치면: glpkg install -g @ist/detector-agent   (@ist/smon-kit 계열)
+> skit install @comfozi/parse-fleet@0.2.1   # ① 파서 프로필 → ~/.ist/profiles/ (isesh -p 가 찾는 프로필)
+> detector-agent start        # ② smon 승인 봇 기동(백그라운드 데몬) — 모든 ist-- 세션 자동 감지
+> detector-agent status       # 떠 있는지 확인  (미설치면: glpkg install -g @ist/detector-agent — @ist/smon-kit 계열)
 > ```
 
 - **①(기본 권장) = `--engine headless --backend claude`**: 이미지·스캔을 `claude -p`(headless)로 파싱 → **프롬프트 없이 완주**(smon·detector-agent 불필요). 텍스트(csv·pdf-text 등)는 `--mode auto`가 **결정적**(pdfjs 텍스트레이어)으로 먼저 처리하고, 이미지·스캔(png·jpg·pdf-image·photo)만 headless AI vision으로 보냅니다.
